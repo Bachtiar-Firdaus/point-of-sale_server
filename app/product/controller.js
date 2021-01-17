@@ -49,4 +49,12 @@ async function store(req, res, next) {
   }
 }
 
-module.exports = { store };
+async function index(req, res, next) {
+  try {
+    let products = await Product.find();
+    return res.json(products);
+  } catch (error) {
+    next(error);
+  }
+}
+module.exports = { store, index };

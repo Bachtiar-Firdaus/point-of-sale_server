@@ -9,4 +9,6 @@ router.post(
   productController.store
 );
 
+router.get("/products", productController.index);
+
 module.exports = router;
