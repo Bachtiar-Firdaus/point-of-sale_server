@@ -51,7 +51,10 @@ async function store(req, res, next) {
 
 async function index(req, res, next) {
   try {
-    let products = await Product.find();
+    let { limit = 10, skip = 0 } = req.query;
+    let products = await Product.find()
+      .limit(parseInt(limit))
+      .skip(parseInt(skip));
     return res.json(products);
   } catch (error) {
     next(error);
