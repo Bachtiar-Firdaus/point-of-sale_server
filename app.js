@@ -9,6 +9,7 @@ var logger = require("morgan");
 // var usersRouter = require('./routes/users');
 // custom router
 const productRouter = require("./app/product/router");
+const authController = require("./app/auth/router");
 
 var app = express();
 
@@ -27,6 +28,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // app.use("/users", usersRouter);
 //custom router
 app.use("/api", productRouter);
+app.use("/api", authController);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -3,6 +3,7 @@ const { model, Schema } = mongoose.set("useCreateIndex", true);
 const path = require("path");
 const bcrypt = require("bcrypt");
 const AutoIncrement = require("mongoose-sequence")(mongoose);
+const { Timestamp } = require("mongodb");
 
 const HASH_ROUND = 10;
 let userSchema = Schema(
@@ -33,7 +34,7 @@ let userSchema = Schema(
     },
     token: [String],
   },
-  { timestamps: true }
+  { Timestamp: true }
 );
 
 userSchema.path("email").validate(

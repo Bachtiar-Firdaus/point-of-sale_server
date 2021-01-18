@@ -1,8 +1,22 @@
 const fs = require("fs");
 const path = require("path");
+const passport = require("passport");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 const User = require("../user/model");
 const config = require("../config");
+const { getToken } = require("../utilts/get-token");
+
+function me(req, res, next) {
+  if (!req.user) {
+    return res.json({
+      error: 1,
+      message: `Your're not login or token expired`,
+    });
+  }
+  return res.json(req.user);
+}
 
 async function index(req, res, next) {
   try {
@@ -14,4 +28,4 @@ async function index(req, res, next) {
   }
 }
 
-module.exports = { index };
+module.exports = { index, me };
