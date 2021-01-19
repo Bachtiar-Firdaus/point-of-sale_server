@@ -14,5 +14,6 @@ router.get("/me", authController.me);
 router.post("/register", multer().none(), authController.register);
 router.delete("/delete/:id", authController.destroy);
 router.post("/login", multer().none(), authController.login);
+router.post("/logout", authController.logout);
 
 module.exports = router;

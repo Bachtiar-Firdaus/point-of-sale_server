@@ -143,4 +143,24 @@ async function login(req, res, next) {
   })(req, res, next);
 }
 
-module.exports = { index, me, register, destroy, localStrategy, login };
+async function logout(req, res, next) {
+  let token = getToken(req);
+  let user = await User.findOneAndUpdate(
+    { token: { $in: [token] } },
+    { $pull: { token } },
+    { useFindAndModify: false }
+  );
+
+  if (!user || !token) {
+    return res.json({
+      error: 1,
+      message: "Tidak Ditemukan User",
+    });
+  }
+  return res.json({
+    error: 0,
+    message: "Logout Berhasil",
+  });
+}
+
+module.exports = { index, me, register, destroy, localStrategy, login, logout };
