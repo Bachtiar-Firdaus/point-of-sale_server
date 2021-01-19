@@ -158,8 +158,23 @@ async function update(req, res, next) {
   }
 }
 
+//Pembatasan Akses hanya untuk admin
 async function destroy(req, res, next) {
   try {
+    if (!req.user) {
+      return res.json({
+        error: 1,
+        message: "Anda Belum Login atau Token Expired",
+      });
+    }
+    let policy = policyFor(req.user);
+    if (!policy.can("manage", "all")) {
+      return res.json({
+        error: 1,
+        message: "Anda Tidak Memiliki Akses Untuk Menghapus Produk",
+      });
+    }
+
     let product = await Product.findOneAndDelete({ _id: req.params.id });
     let currentImage = `${config.rootPath}/public/upload/${product.image_url}`;
 
