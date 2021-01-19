@@ -26,7 +26,7 @@ async function index(req, res, next) {
     if (!req.user) {
       return res.json({
         error: 1,
-        message: `Your're not login or token expired`,
+        message: `Kamu Belum Login atau token tidak berlaku lagi`,
       });
     }
     let policy = policyFor(req.user);
@@ -52,8 +52,23 @@ async function index(req, res, next) {
   }
 }
 
+//pembatasan hanya untuk admin
 async function register(req, res, next) {
   try {
+    if (!req.user) {
+      return res.json({
+        error: 1,
+        message: `Kamu Belum Login atau token tidak berlaku lagi`,
+      });
+    }
+    let policy = policyFor(req.user);
+    console.log(req.user);
+    if (!policy.can("manage", "all")) {
+      return res.json({
+        error: 1,
+        message: `Anda tidak memiliki akses untuk melihat produk`,
+      });
+    }
     const payload = req.body;
     let user = new User(payload);
     await user.save();
