@@ -77,4 +77,21 @@ async function destroy(req, res, next) {
     next(error);
   }
 }
-module.exports = { index, me, register, destroy };
+
+async function localStrategy(email, password, done) {
+  try {
+    let user = await User.findOne({ email }).select(
+      "-__v -createdAt -updatedAt -cart_items -token"
+    );
+    if (!user) return done();
+    if (bcrypt.compareSync(password, user.password)) {
+      ({ password, ...userWithoutPassword } = user.toJSON());
+      return done(null, userWithoutPassword);
+    }
+  } catch (error) {
+    done(error, null);
+  }
+  done();
+}
+
+module.exports = { index, me, register, destroy, localStrategy };

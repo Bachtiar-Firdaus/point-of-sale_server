@@ -5,6 +5,10 @@ const LocalStrategy = require("passport-local").Strategy;
 
 const authController = require("./controller");
 
+passport.use(
+  new LocalStrategy({ usernameField: "email" }, Controller.LocalStrategy)
+);
+
 router.get("/user", authController.index);
 router.get("/me", authController.me);
 router.post("/register", multer().none(), authController.register);
