@@ -46,4 +46,12 @@ async function register(req, res, next) {
   }
 }
 
-module.exports = { index, me, register };
+async function destroy(req, res, next) {
+  try {
+    let user = await User.findOneAndDelete({ _id: req.params.id });
+    return res.json(user);
+  } catch (error) {
+    next(error);
+  }
+}
+module.exports = { index, me, register, destroy };
