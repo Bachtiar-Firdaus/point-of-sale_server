@@ -84,9 +84,23 @@ async function register(req, res, next) {
     next(error);
   }
 }
-
+//pembatasan hanya untuk admin
 async function destroy(req, res, next) {
   try {
+    if (!req.user) {
+      return res.json({
+        error: 1,
+        message: `Kamu Belum Login atau token tidak berlaku lagi`,
+      });
+    }
+    let policy = policyFor(req.user);
+    console.log(req.user);
+    if (!policy.can("manage", "all")) {
+      return res.json({
+        error: 1,
+        message: `Anda tidak memiliki akses untuk melihat produk`,
+      });
+    }
     let user = await User.findOneAndDelete({ _id: req.params.id });
     return res.json(user);
   } catch (error) {
