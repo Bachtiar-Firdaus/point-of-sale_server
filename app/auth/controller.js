@@ -28,4 +28,22 @@ async function index(req, res, next) {
   }
 }
 
-module.exports = { index, me };
+async function register(req, res, next) {
+  try {
+    const payload = req.body;
+    let user = new User(payload);
+    await user.save();
+    return res.json(user);
+  } catch (error) {
+    if (error && error.message === "ValidationError") {
+      return res.json({
+        error: 1,
+        message: error.message,
+        fields: error.errors,
+      });
+    }
+    next(error);
+  }
+}
+
+module.exports = { index, me, register };
