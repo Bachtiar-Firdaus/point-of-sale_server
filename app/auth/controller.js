@@ -8,7 +8,7 @@ const User = require("../user/model");
 const config = require("../config");
 const { getToken } = require("../utilts/get-token");
 
-const policyFor = require("../policy");
+const { policyFor } = require("../policy");
 
 function me(req, res, next) {
   if (!req.user) {
@@ -20,6 +20,7 @@ function me(req, res, next) {
   return res.json(req.user);
 }
 
+//pembatasan hanya untuk admin
 async function index(req, res, next) {
   try {
     if (!req.user) {
@@ -29,13 +30,13 @@ async function index(req, res, next) {
       });
     }
     let policy = policyFor(req.user);
-    if (!policy.can("read", "Product")) {
+    console.log(req.user);
+    if (!policy.can("manage", "all")) {
       return res.json({
         error: 1,
-        message: `Anda tidak memiliki akses untuk membuat produk`,
+        message: `Anda tidak memiliki akses untuk melihat produk`,
       });
     }
-    console.log(policy);
     let { limit = 10, skip = 0 } = req.query;
     let user = await User.find().limit(parseInt(limit)).skip(parseInt(skip));
     return res.json(user);
@@ -94,4 +95,23 @@ async function localStrategy(email, password, done) {
   done();
 }
 
-module.exports = { index, me, register, destroy, localStrategy };
+async function login(req, res, next) {
+  passport.authenticate("local", async function (error, user) {
+    if (error) return next(error);
+    if (!user)
+      return res.json({ error: 1, message: "email or password incorect" });
+    let signed = jwt.sign(user, config.secretKey);
+    await User.findByIdAndUpdate(
+      { _id: user._id },
+      { $push: { token: signed } },
+      { new: true }
+    );
+    return res.json({
+      message: "logged in successfully",
+      user: user,
+      token: signed,
+    });
+  })(req, res, next);
+}
+
+module.exports = { index, me, register, destroy, localStrategy, login };
