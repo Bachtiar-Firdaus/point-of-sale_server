@@ -93,8 +93,24 @@ async function index(req, res, next) {
   }
 }
 
+//Pembatasan Akses hanya untuk admin
 async function update(req, res, next) {
   try {
+    if (!req.user) {
+      return res.json({
+        error: 1,
+        message: "Anda Belum Login Atau Token Expired",
+      });
+    }
+
+    let policy = policyFor(req.user);
+    if (!policy.can("manage", "all")) {
+      return res.json({
+        error: 1,
+        message: "Anda Tidak Memiliki Akses untuk Merubah Product",
+      });
+    }
+
     let payload = req.body;
     if (req.file) {
       let tmp_path = req.file.path;
