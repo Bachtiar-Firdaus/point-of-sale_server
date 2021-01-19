@@ -8,6 +8,8 @@ const User = require("../user/model");
 const config = require("../config");
 const { getToken } = require("../utilts/get-token");
 
+const policyFor = require("../policy");
+
 function me(req, res, next) {
   if (!req.user) {
     return res.json({
@@ -20,10 +22,31 @@ function me(req, res, next) {
 
 async function index(req, res, next) {
   try {
+    if (!req.user) {
+      return res.json({
+        error: 1,
+        message: `Your're not login or token expired`,
+      });
+    }
+    let policy = policyFor(req.user);
+    if (!policy.can("read", "Product")) {
+      return res.json({
+        error: 1,
+        message: `Anda tidak memiliki akses untuk membuat produk`,
+      });
+    }
+    console.log(policy);
     let { limit = 10, skip = 0 } = req.query;
     let user = await User.find().limit(parseInt(limit)).skip(parseInt(skip));
     return res.json(user);
   } catch (error) {
+    if (error && error.name === "ValidasiError") {
+      return res.json({
+        error: 1,
+        message: error.message,
+        fields: error.errors,
+      });
+    }
     next(error);
   }
 }

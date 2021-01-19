@@ -3,6 +3,7 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+const cors = require("cors");
 
 //default express generator
 // var indexRouter = require('./routes/index');
@@ -10,6 +11,9 @@ var logger = require("morgan");
 // custom router
 const productRouter = require("./app/product/router");
 const authController = require("./app/auth/router");
+
+const { decodeToken } = require("./app/auth/middleware");
+const { decode } = require("jsonwebtoken");
 
 var app = express();
 
@@ -27,6 +31,10 @@ app.use(express.static(path.join(__dirname, "public")));
 // app.use("/", indexRouter);
 // app.use("/users", usersRouter);
 //custom router
+
+app.use(cors());
+app.use(decodeToken());
+
 app.use("/api", productRouter);
 app.use("/api", authController);
 
