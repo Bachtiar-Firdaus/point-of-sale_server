@@ -49,14 +49,29 @@ async function store(req, res, next) {
   }
 }
 
+//validation Wajib Login
 async function index(req, res, next) {
   try {
+    if (!req.user) {
+      return res.json({
+        error: 1,
+        message: `Kamu Belum Login atau token tidak berlaku lagi`,
+      });
+    }
     let { limit = 10, skip = 0 } = req.query;
     let products = await Product.find()
       .limit(parseInt(limit))
       .skip(parseInt(skip));
     return res.json(products);
   } catch (error) {
+    if (error && error.name === "ValidationError") {
+      return res.json({
+        error: 1,
+        message: error.message,
+        fields: error.errors,
+      });
+    }
+
     next(error);
   }
 }
