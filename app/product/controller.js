@@ -4,8 +4,25 @@ const path = require("path");
 const Product = require("./model");
 const config = require("../config");
 
+const { policyFor } = require("../policy");
+
+//Pembatasan Akses hanya untuk admin
 async function store(req, res, next) {
   try {
+    if (!req.user) {
+      return res.json({
+        error: 1,
+        message: "Kamu Belum Login atau Token tidak berlaku lagi",
+      });
+    }
+    let policy = policyFor(req.user);
+    if (!policy.can("manage", "all")) {
+      return res.json({
+        error: 1,
+        message: "Anda Tidak meiliki akses untuk menambahkan Produk",
+      });
+    }
+
     let payload = req.body;
 
     if (req.file) {

@@ -30,7 +30,6 @@ async function index(req, res, next) {
       });
     }
     let policy = policyFor(req.user);
-    console.log(req.user);
     if (!policy.can("manage", "all")) {
       return res.json({
         error: 1,
