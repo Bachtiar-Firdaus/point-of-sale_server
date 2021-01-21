@@ -35,4 +35,36 @@ async function index(req, res, next) {
   }
 }
 
-module.exports = { index };
+async function variant(req, res, next) {
+  try {
+    if (!req.user) {
+      return res.json({
+        error: 1,
+        message: "Anda Belum Login atau Token Expired",
+      });
+    }
+    let policy = policyFor(req.user);
+    if (!policy.can("manage", "all")) {
+      return res.json({
+        error: 1,
+        message: "Anda Tidak Memiliki Akses Untuk Menambahkan Variant",
+      });
+    }
+    let payload = req.body;
+    let variant = new Variant(payload);
+    await variant.save();
+    return res.json(variant);
+  } catch (error) {
+    if (error && error.name === "ValidationError") {
+      return res.json({
+        error: 1,
+        message: error.message,
+        fields: error.errors,
+      });
+    }
+
+    next(error);
+  }
+}
+
+module.exports = { index, variant };

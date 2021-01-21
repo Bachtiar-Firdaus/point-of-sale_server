@@ -8,19 +8,19 @@ const variantSchema = Schema(
       type: Schema.Types.ObjectId,
       ref: "Product",
     },
+    data: [
+      {
+        name: {
+          type: String,
+          minlength: [1, "Nama Variant minimal 1 karakter"],
+          required: [true, "Nama Variant Wajib Di isi"],
+        },
 
-    name: [
-      {
-        type: String,
-        minlength: [1, "Nama Variant minimal 1 karakter"],
-        required: [true, "Nama Variant Wajib Di isi"],
-      },
-    ],
-    stock: [
-      {
-        type: Number,
-        minlength: [1, "Jumlah Stock minimal 1"],
-        required: [true, "Stock Wajib Di Isi"],
+        stock: {
+          type: Number,
+          minlength: [1, "Jumlah Stock minimal 1"],
+          required: [true, "Stock Wajib Di Isi"],
+        },
       },
     ],
   },
