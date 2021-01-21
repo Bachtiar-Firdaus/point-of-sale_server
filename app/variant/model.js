@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { model, Schema } = mongoose.set("userCreateIndex", true);
+const { model, Schema } = mongoose.set("useCreateIndex", true);
 
 const variantSchema = Schema(
   {
