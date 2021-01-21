@@ -91,4 +91,34 @@ async function update(req, res, next) {
   }
 }
 
-module.exports = { index, category, update };
+async function destroy(req, res, next) {
+  try {
+    if (!req.user) {
+      return res.json({
+        error: 1,
+        message: "Anda Belum Login Atau Token Expired",
+      });
+    }
+
+    let policy = policyFor(req.user);
+    if (!policy.can("manage", "all")) {
+      return res.json({
+        error: 1,
+        message: "Anda Tidak Memiliki Akses Untuk Menghapus Category",
+      });
+    }
+    let deleted = await Category.findOneAndDelete({ _id: req.params.id });
+    return res.json(deleted);
+  } catch (error) {
+    if (error && error.name === "ValidationError") {
+      return res.json({
+        error: 1,
+        message: error.message,
+        fields: error.errors,
+      });
+    }
+    next(error);
+  }
+}
+
+module.exports = { index, category, update, destroy };
