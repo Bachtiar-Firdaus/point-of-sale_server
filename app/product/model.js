@@ -16,6 +16,12 @@ const productSchema = Schema(
     },
 
     image_url: String,
+
+    //relational collection
+    category: {
+      type: Schema.Types.ObjectId,
+      ref: "Category",
+    },
   },
   { timestamps: true }
 );
