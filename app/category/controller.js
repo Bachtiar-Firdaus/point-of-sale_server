@@ -9,8 +9,12 @@ async function index(req, res, next) {
         message: "Anda Belum Login Atau Token Expired",
       });
     }
-    let { limit = 10, skip = 0 } = req.query;
-    let category = await Category.find()
+    let { limit = 10, skip = 0, q = "" } = req.query;
+    let criteria = {};
+    if (q.length) {
+      criteria = { ...criteria, name: { $regex: `${q}`, $options: "i" } };
+    }
+    let category = await Category.find(criteria)
       .limit(parseInt(limit))
       .skip(parseInt(skip));
     return res.json(category);
