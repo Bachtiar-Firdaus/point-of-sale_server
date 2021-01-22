@@ -10,6 +10,7 @@ const { getToken } = require("../utilts/get-token");
 
 const { policyFor } = require("../policy");
 
+const HASH_ROUND = 10;
 function me(req, res, next) {
   if (!req.user) {
     return res.json({
@@ -113,6 +114,46 @@ async function register(req, res, next) {
     next(error);
   }
 }
+
+async function update(req, res, next) {
+  try {
+    if (!req.user) {
+      return res.json({
+        error: 1,
+        message: "Anda Belum Login atau Token Expired",
+      });
+    }
+    let policy = policyFor(req.user);
+    if (!policy.can("manage", "all")) {
+      return res.json({
+        error: 1,
+        message: "Anda Tidak Memiliki Akses untuk Merubah User",
+      });
+    }
+    let payload = req.body;
+    let password = bcrypt.hashSync(payload.password, HASH_ROUND);
+    let finalPayload = { ...payload, password };
+    let user = await User.findOneAndUpdate(
+      { _id: req.params.id },
+      finalPayload,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+    return res.json(user);
+  } catch (error) {
+    if (error && error.name === "ValidationError") {
+      return res.json({
+        error: 1,
+        message: error.message,
+        fields: error.errors,
+      });
+    }
+    next(error);
+  }
+}
+
 //pembatasan hanya untuk admin
 async function destroy(req, res, next) {
   try {
@@ -201,4 +242,5 @@ module.exports = {
   login,
   logout,
   singgleUser,
+  update,
 };
