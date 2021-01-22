@@ -206,7 +206,9 @@ async function destroy(req, res, next) {
       });
     }
 
-    let product = await Product.findOneAndDelete({ _id: req.params.id });
+    let product = await Product.findOneAndDelete({ _id: req.params.id })
+      .populate("category")
+      .populate("variant");
     let currentImage = `${config.rootPath}/public/upload/${product.image_url}`;
 
     if (fs.existsSync(currentImage)) {
