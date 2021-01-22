@@ -128,4 +128,27 @@ async function update(req, res, next) {
   }
 }
 
-module.exports = { index, variant, update, singleVariant };
+async function destroy(req, res, next) {
+  try {
+    if (!req.user) {
+      return res.json({
+        error: 1,
+        message: "Anda Belum Login Atau Token Expired",
+      });
+    }
+
+    let policy = policyFor(req.user);
+    if (!policy.can("manage", "all")) {
+      return res.json({
+        error: 1,
+        message: "Anda Tidak Memiliki Akses Untuk Menghapus Variant",
+      });
+    }
+    let deleted = await Variant.findOneAndDelete({ _id: req.params.id });
+    return res.json(deleted);
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = { index, variant, update, singleVariant, destroy };
