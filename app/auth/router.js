@@ -11,6 +11,7 @@ passport.use(
 
 router.get("/user", authController.index);
 router.get("/me", authController.me);
+router.get("/user/:id", authController.singgleUser);
 router.post("/register", multer().none(), authController.register);
 router.delete("/delete/:id", authController.destroy);
 router.post("/login", multer().none(), authController.login);

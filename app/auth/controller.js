@@ -33,11 +33,41 @@ async function index(req, res, next) {
     if (!policy.can("manage", "all")) {
       return res.json({
         error: 1,
-        message: `Anda tidak memiliki akses untuk melihat produk`,
+        message: `Anda tidak memiliki akses untuk melihat user`,
       });
     }
     let { limit = 10, skip = 0 } = req.query;
     let user = await User.find().limit(parseInt(limit)).skip(parseInt(skip));
+    return res.json(user);
+  } catch (error) {
+    if (error && error.name === "ValidasiError") {
+      return res.json({
+        error: 1,
+        message: error.message,
+        fields: error.errors,
+      });
+    }
+    next(error);
+  }
+}
+//pembatasan hanya untuk admin
+async function singgleUser(req, res, next) {
+  try {
+    if (!req.user) {
+      return res.json({
+        error: 1,
+        message: `Kamu Belum Login atau token tidak berlaku lagi`,
+      });
+    }
+    let policy = policyFor(req.user);
+    if (!policy.can("manage", "all")) {
+      return res.json({
+        error: 1,
+        message: `Anda tidak memiliki akses untuk melihat user`,
+      });
+    }
+    let id = req.params.id;
+    let user = await User.findOne({ _id: id });
     return res.json(user);
   } catch (error) {
     if (error && error.name === "ValidasiError") {
@@ -65,7 +95,7 @@ async function register(req, res, next) {
     if (!policy.can("manage", "all")) {
       return res.json({
         error: 1,
-        message: `Anda tidak memiliki akses untuk melihat produk`,
+        message: `Anda tidak memiliki akses untuk melihat user`,
       });
     }
     const payload = req.body;
@@ -97,7 +127,7 @@ async function destroy(req, res, next) {
     if (!policy.can("manage", "all")) {
       return res.json({
         error: 1,
-        message: `Anda tidak memiliki akses untuk melihat produk`,
+        message: `Anda tidak memiliki akses untuk melihat user`,
       });
     }
     let user = await User.findOneAndDelete({ _id: req.params.id });
@@ -162,4 +192,13 @@ async function logout(req, res, next) {
   });
 }
 
-module.exports = { index, me, register, destroy, localStrategy, login, logout };
+module.exports = {
+  index,
+  me,
+  register,
+  destroy,
+  localStrategy,
+  login,
+  logout,
+  singgleUser,
+};
