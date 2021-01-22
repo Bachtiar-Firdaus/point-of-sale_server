@@ -166,7 +166,9 @@ async function update(req, res, next) {
           { _id: req.params.id },
           { ...payload, image_url: filename },
           { new: true, runValidators: true }
-        );
+        )
+          .populate("category")
+          .populate("variant");
 
         return res.json(product);
       });
