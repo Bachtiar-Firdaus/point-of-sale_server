@@ -22,6 +22,12 @@ const productSchema = Schema(
       type: Schema.Types.ObjectId,
       ref: "Category",
     },
+    variant: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Variant",
+      },
+    ],
   },
   { timestamps: true }
 );
