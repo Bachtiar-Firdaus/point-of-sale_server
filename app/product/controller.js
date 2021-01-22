@@ -78,7 +78,9 @@ async function index(req, res, next) {
     let { limit = 10, skip = 0 } = req.query;
     let products = await Product.find()
       .limit(parseInt(limit))
-      .skip(parseInt(skip));
+      .skip(parseInt(skip))
+      .populate("category")
+      .populate("variant");
     return res.json(products);
   } catch (error) {
     if (error && error.name === "ValidationError") {
