@@ -93,6 +93,31 @@ async function index(req, res, next) {
   }
 }
 
+//validation Wajib Login
+async function singgleProduct(req, res, next) {
+  try {
+    if (!req.user) {
+      return res.json({
+        error: 1,
+        message: `Kamu Belum Login atau token tidak berlaku lagi`,
+      });
+    }
+    let id = req.params.id;
+    let products = await Product.findOne({ _id: id });
+    return res.json(products);
+  } catch (error) {
+    if (error && error.name === "ValidationError") {
+      return res.json({
+        error: 1,
+        message: error.message,
+        fields: error.errors,
+      });
+    }
+
+    next(error);
+  }
+}
+
 //Pembatasan Akses hanya untuk admin
 async function update(req, res, next) {
   try {
@@ -186,4 +211,4 @@ async function destroy(req, res, next) {
     next(error);
   }
 }
-module.exports = { store, index, update, destroy };
+module.exports = { store, index, update, destroy, singgleProduct };

@@ -10,6 +10,7 @@ router.post(
 );
 
 router.get("/products", productController.index);
+router.get("/products/:id", productController.singgleProduct);
 
 router.put(
   "/products/:id",
