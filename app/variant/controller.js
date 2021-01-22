@@ -39,6 +39,29 @@ async function index(req, res, next) {
   }
 }
 
+async function singleVariant(req, res, next) {
+  try {
+    if (!req.user) {
+      return res.json({
+        error: 1,
+        message: "Anda Belum Login Atau Token Expired",
+      });
+    }
+    let policy = policyFor(req.user);
+    if (!policy.can("manage", "all")) {
+      return res.json({
+        error: 1,
+        message: "Anda Tidak Memiliki Akses Untuk Melihat Singgle Variant",
+      });
+    }
+
+    let single = await Variant.findOne({ _id: req.params.id });
+    return res.json(single);
+  } catch (error) {
+    next(error);
+  }
+}
+
 async function variant(req, res, next) {
   try {
     if (!req.user) {
@@ -105,4 +128,4 @@ async function update(req, res, next) {
   }
 }
 
-module.exports = { index, variant, update };
+module.exports = { index, variant, update, singleVariant };
