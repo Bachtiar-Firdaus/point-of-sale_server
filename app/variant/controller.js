@@ -17,8 +17,12 @@ async function index(req, res, next) {
       });
     }
 
-    let { limit = 10, skip = 0 } = req.query;
-    let variant = await Variant.find()
+    let { limit = 10, skip = 0, q = "" } = req.query;
+    let criteria = {};
+    if (q.length) {
+      criteria = { ...criteria, name: { $regex: `${q}`, $options: "i" } };
+    }
+    let variant = await Variant.find(criteria)
       .limit(parseInt(limit))
       .skip(parseInt(skip));
 
