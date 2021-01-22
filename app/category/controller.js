@@ -26,6 +26,22 @@ async function index(req, res, next) {
   }
 }
 
+async function singgleCategory(req, res, next) {
+  try {
+    if (!req.user) {
+      return res.json({
+        error: 1,
+        message: "Anda Belum Login Atau Token Expired",
+      });
+    }
+    let id = req.params.id;
+    let category = await Category.findOne({ _id: id });
+    return res.json(category);
+  } catch (error) {
+    next(error);
+  }
+}
+
 async function category(req, res, next) {
   try {
     if (!req.user) {
@@ -121,4 +137,4 @@ async function destroy(req, res, next) {
   }
 }
 
-module.exports = { index, category, update, destroy };
+module.exports = { index, category, update, destroy, singgleCategory };
