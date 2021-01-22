@@ -4,5 +4,6 @@ const variantController = require("./controller");
 
 router.get("/variant", variantController.index);
 router.post("/variant", multer().none(), variantController.variant);
+router.put("/variant/:id", multer().none(), variantController.update);
 
 module.exports = router;

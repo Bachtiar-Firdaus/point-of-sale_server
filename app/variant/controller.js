@@ -67,4 +67,38 @@ async function variant(req, res, next) {
   }
 }
 
-module.exports = { index, variant };
+async function update(req, res, next) {
+  try {
+    if (!req.user) {
+      return res.json({
+        error: 1,
+        message: "Anda Belum Login Atau Token Expired",
+      });
+    }
+    let policy = policyFor(req.user);
+    if (!policy.can("manage", "all")) {
+      return res.json({
+        error: 1,
+        message: "Anda Tidak Memiliki Akses Untuk Merubah Variant",
+      });
+    }
+    let payload = req.body;
+    let variant = await Variant.findOneAndUpdate(
+      { _id: req.params.id },
+      payload,
+      { new: true, runValidators: true }
+    );
+    return res.json(variant);
+  } catch (error) {
+    if (error && error.name === "ValidationError") {
+      return res.json({
+        error: 1,
+        message: error.message,
+        fields: error.errors,
+      });
+    }
+    next(error);
+  }
+}
+
+module.exports = { index, variant, update };

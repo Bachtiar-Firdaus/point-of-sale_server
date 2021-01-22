@@ -3,17 +3,17 @@ const { model, Schema } = mongoose.set("useCreateIndex", true);
 
 const variantSchema = Schema(
   {
-    //relational collection
-    product: {
-      type: Schema.Types.ObjectId,
-      ref: "Product",
+    name: {
+      type: String,
+      minlength: [1, "Nama Variant minimal 1 karakter"],
+      required: [true, "Nama Variant Wajib Di isi"],
     },
-    data: [
+    option: [
       {
         name: {
           type: String,
-          minlength: [1, "Nama Variant minimal 1 karakter"],
-          required: [true, "Nama Variant Wajib Di isi"],
+          minlength: [1, "Nama Options Variant minimal 1 karakter"],
+          required: [true, "Nama Options Variant Wajib Di isi"],
         },
 
         stock: {
