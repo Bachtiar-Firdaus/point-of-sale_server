@@ -105,7 +105,9 @@ async function singgleProduct(req, res, next) {
       });
     }
     let id = req.params.id;
-    let products = await Product.findOne({ _id: id });
+    let products = await Product.findOne({ _id: id })
+      .populate("category")
+      .populate("variant");
     return res.json(products);
   } catch (error) {
     if (error && error.name === "ValidationError") {
