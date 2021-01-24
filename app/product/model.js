@@ -28,6 +28,10 @@ const productSchema = Schema(
         ref: "Variant",
       },
     ],
+    discount: {
+      type: Schema.Types.ObjectId,
+      ref: "Discount",
+    },
   },
   { timestamps: true }
 );
