@@ -71,6 +71,93 @@ async function createDiscount(req, res, next) {
   }
 }
 
+async function addProductToDiscount(req, res, next) {
+  try {
+    if (!req.user) {
+      return res.json({
+        error: 1,
+        message: "Anda Belum Login Atau Token Expired",
+      });
+    }
+    let policy = policyFor(req.user);
+    if (!policy.can("manage", "all")) {
+      return res.json({
+        error: 1,
+        message:
+          "Anda Tidak Memiliki Akases untuk Menambahkan Product Yang Discount",
+      });
+    }
+    let payload = req.body;
+    console.log(payload);
+    //hapus product yang sama didalam discount
+    Discount.find({}).then(async (check_discounts) => {
+      payload.product.forEach((dataPayload) => {
+        check_discounts.forEach((check_discount) => {
+          check_discount.product.forEach(async (dataCollcetion) => {
+            if (
+              JSON.stringify(dataPayload) === JSON.stringify(dataCollcetion)
+            ) {
+              check_discount.product.pull(dataCollcetion);
+              await Discount.findOneAndUpdate(
+                { _id: check_discount._id },
+                { product: check_discount.product },
+                {
+                  new: true,
+                  runValidators: true,
+                }
+              );
+            }
+          });
+        });
+      });
+    });
+
+    let discount = await Discount.findOne({ _id: req.params.id });
+    //menambahkan product lebih dari 1
+    if (payload.product.length) {
+      payload.product = await Product.find({ _id: { $in: payload.product } });
+      await Product.bulkWrite(
+        payload.product.map((item) => {
+          return {
+            updateOne: {
+              filter: { _id: item._id },
+              update: { discount: discount._id },
+              upsert: true,
+            },
+          };
+        })
+      );
+    } else {
+      //Jika Productnya tidak ada
+      discount.product.forEach(async (product) => {
+        const item = await Product.findOne({ _id: product });
+        item.discount = undefined;
+        await item.save();
+      });
+    }
+    //menambahkan jika hanya 1 product
+    discount = await Discount.findOneAndUpdate(
+      { _id: req.params.id },
+      payload,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    return res.json(discount);
+  } catch (error) {
+    if (error && error.name === "ValidationError") {
+      return res.json({
+        error: 1,
+        message: error.message,
+        fields: error.errors,
+      });
+    }
+    next(error);
+  }
+}
+
 async function updateDiscount(req, res, next) {
   try {
     if (!req.user) {
@@ -140,4 +227,5 @@ module.exports = {
   destroyDiscount,
   singgleDiscount,
   updateDiscount,
+  addProductToDiscount,
 };
