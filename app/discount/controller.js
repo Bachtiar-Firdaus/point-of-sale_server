@@ -25,6 +25,21 @@ async function index(req, res, next) {
   }
 }
 
+async function singgleDiscount(req, res, json) {
+  try {
+    if (!req.user) {
+      return res.json({
+        error: 1,
+        message: "Anda Belum Login Atau Token Expired",
+      });
+    }
+    let findDiscount = await Discount.findOne({ _id: req.params.id });
+    return res.json(findDiscount);
+  } catch (error) {
+    next(error);
+  }
+}
+
 async function createDiscount(req, res, next) {
   try {
     if (!req.user) {
@@ -80,4 +95,4 @@ async function destroyDiscount(req, res, next) {
   }
 }
 
-module.exports = { index, createDiscount, destroyDiscount };
+module.exports = { index, createDiscount, destroyDiscount, singgleDiscount };
