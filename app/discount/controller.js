@@ -56,4 +56,28 @@ async function createDiscount(req, res, next) {
   }
 }
 
-module.exports = { index, createDiscount };
+async function destroyDiscount(req, res, next) {
+  try {
+    if (!req.user) {
+      return res.json({
+        error: 1,
+        message: "Anda Belum Login atau Token Expired",
+      });
+    }
+    let policy = policyFor(req.user);
+    if (!policy.can("manage", "all")) {
+      return res.json({
+        error: 1,
+        message: "Anda Tidak Memiliki Akses Untuk Menghapus Discount",
+      });
+    }
+    let deleteDiscount = await Discount.findOneAndDelete({
+      _id: req.params.id,
+    });
+    return res.json(deleteDiscount);
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = { index, createDiscount, destroyDiscount };
