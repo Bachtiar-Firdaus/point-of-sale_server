@@ -40,4 +40,4 @@ const discountSchema = Schema(
   { timestamps: true }
 );
 
-module.exports = ("Discount", discountSchema);
+module.exports = model("Discount", discountSchema);
