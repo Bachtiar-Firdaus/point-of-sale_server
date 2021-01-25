@@ -25,4 +25,35 @@ async function index(req, res, next) {
   }
 }
 
-module.exports = { index };
+async function createDiscount(req, res, next) {
+  try {
+    if (!req.user) {
+      return res.json({
+        error: 1,
+        message: "Anda Belum Login Atau Token Expired",
+      });
+    }
+    let policy = policyFor(req.user);
+    if (!policy.can("manage", "all")) {
+      return res.json({
+        error: 1,
+        message: "Anda Tidak Memiliki Akses Untuk Menambahkan Discount",
+      });
+    }
+    let payload = req.body;
+    let postDiscount = new Discount(payload);
+    await postDiscount.save();
+    return res.json(postDiscount);
+  } catch (error) {
+    if (error && error.name === "ValidationError") {
+      return res.json({
+        error: 1,
+        message: error.message,
+        fields: error.errors,
+      });
+    }
+    next(error);
+  }
+}
+
+module.exports = { index, createDiscount };
