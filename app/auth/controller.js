@@ -37,8 +37,14 @@ async function index(req, res, next) {
         message: `Anda tidak memiliki akses untuk melihat user`,
       });
     }
-    let { limit = 10, skip = 0 } = req.query;
-    let user = await User.find().limit(parseInt(limit)).skip(parseInt(skip));
+    let { limit = 10, skip = 0, q = "" } = req.query;
+    let criteria = {};
+    if (q.length) {
+      criteria = { ...criteria, full_name: { $regex: `${q}`, $options: "i" } };
+    }
+    let user = await User.find(criteria)
+      .limit(parseInt(limit))
+      .skip(parseInt(skip));
     return res.json(user);
   } catch (error) {
     if (error && error.name === "ValidasiError") {
