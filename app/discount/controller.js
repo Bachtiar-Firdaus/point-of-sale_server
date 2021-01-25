@@ -71,6 +71,45 @@ async function createDiscount(req, res, next) {
   }
 }
 
+async function updateDiscount(req, res, next) {
+  try {
+    if (!req.user) {
+      return res.json({
+        error: 1,
+        message: "Anda Belum Login Atau Token Expired",
+      });
+    }
+
+    let policy = policyFor(req.user);
+    if (!policy.can("manage", "all")) {
+      return res.json({
+        error: 1,
+        message: "Anda Tidak Memiliki Akses Untuk Merubah Discount",
+      });
+    }
+
+    let payload = req.body;
+    let updatedDiscont = await Discount.findOneAndUpdate(
+      { _id: req.params.id },
+      payload,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+    return res.json(updatedDiscont);
+  } catch (error) {
+    if (error && error.name === "ValidationError") {
+      return res.json({
+        error: 1,
+        message: error.message,
+        fields: error.errors,
+      });
+    }
+    next(error);
+  }
+}
+
 async function destroyDiscount(req, res, next) {
   try {
     if (!req.user) {
@@ -95,4 +134,10 @@ async function destroyDiscount(req, res, next) {
   }
 }
 
-module.exports = { index, createDiscount, destroyDiscount, singgleDiscount };
+module.exports = {
+  index,
+  createDiscount,
+  destroyDiscount,
+  singgleDiscount,
+  updateDiscount,
+};
