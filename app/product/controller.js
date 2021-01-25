@@ -75,8 +75,12 @@ async function index(req, res, next) {
         message: `Kamu Belum Login atau token tidak berlaku lagi`,
       });
     }
-    let { limit = 10, skip = 0 } = req.query;
-    let products = await Product.find()
+    let { limit = 10, skip = 0, q = "" } = req.query;
+    let criteria = {};
+    if (q.length) {
+      criteria = { ...criteria, name: { $regex: `${q}`, $options: "i" } };
+    }
+    let products = await Product.find(criteria)
       .limit(parseInt(limit))
       .skip(parseInt(skip))
       .populate("category")
