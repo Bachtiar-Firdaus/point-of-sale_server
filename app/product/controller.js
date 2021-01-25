@@ -84,7 +84,8 @@ async function index(req, res, next) {
       .limit(parseInt(limit))
       .skip(parseInt(skip))
       .populate("category")
-      .populate("variant");
+      .populate("variant")
+      .populate("discount");
     return res.json(products);
   } catch (error) {
     if (error && error.name === "ValidationError") {
@@ -111,7 +112,8 @@ async function singgleProduct(req, res, next) {
     let id = req.params.id;
     let products = await Product.findOne({ _id: id })
       .populate("category")
-      .populate("variant");
+      .populate("variant")
+      .populate("discount");
     return res.json(products);
   } catch (error) {
     if (error && error.name === "ValidationError") {
@@ -172,7 +174,8 @@ async function update(req, res, next) {
           { new: true, runValidators: true }
         )
           .populate("category")
-          .populate("variant");
+          .populate("variant")
+          .populate("discount");
 
         return res.json(product);
       });
@@ -212,7 +215,8 @@ async function destroy(req, res, next) {
 
     let product = await Product.findOneAndDelete({ _id: req.params.id })
       .populate("category")
-      .populate("variant");
+      .populate("variant")
+      .populate("discount");
     let currentImage = `${config.rootPath}/public/upload/${product.image_url}`;
 
     if (fs.existsSync(currentImage)) {
