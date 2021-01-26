@@ -3,6 +3,12 @@ const { model, Schema } = mongoose.set("useCreateIndex", true);
 const AutoIncrement = require("mongoose-sequence")(mongoose);
 
 const orderSchema = Schema({
+  nama_lengkap: {
+    type: String,
+  },
+  email: {
+    type: String,
+  },
   user: {
     type: Schema.Types.ObjectId,
     ref: "user",
