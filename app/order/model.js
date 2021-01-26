@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { model, Schema } = mongoose.set("useCreateIndex");
+const { model, Schema } = mongoose.set("useCreateIndex", true);
 const AutoIncrement = require("mongoose-sequence")(mongoose);
 
 const orderSchema = Schema({
