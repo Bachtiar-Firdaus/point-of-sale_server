@@ -10,18 +10,33 @@ const cartSchema = Schema(
       required: [true, "Nama produk harus diisi"],
     },
 
-    qty: {
-      type: Number,
-      required: [true, "qty harus di isi"],
-      min: [1, "minimal qty adalah 1"],
-    },
+    image_url: String,
 
     price: {
       type: Number,
       default: 0,
     },
 
-    image_url: String,
+    discount: {
+      name: { type: String },
+      type: {
+        type: String,
+        enum: ["%", "fixed"],
+        default: "%",
+      },
+      value: { type: Number, default: 0 },
+    },
+    variant: {
+      name: { type: String },
+      option: { type: String },
+      stock: { type: Number },
+    },
+
+    qty: {
+      type: Number,
+      required: [true, "qty harus di isi"],
+      min: [1, "minimal qty adalah 1"],
+    },
 
     //relational collection
     user: {
