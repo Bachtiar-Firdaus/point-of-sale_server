@@ -42,9 +42,6 @@ orderSchema.post("save", async function () {
               option.stock = option.stock - data.qty;
             }
           });
-          console.log("variant >>>>>>>>>>>");
-          console.log(variant);
-
           await variant.save();
         });
       });

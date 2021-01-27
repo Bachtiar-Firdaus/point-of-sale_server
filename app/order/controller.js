@@ -108,6 +108,13 @@ async function creatOrder(req, res, next) {
       user: req.user._id,
     });
     await postOrder.save();
+
+    await Cart.find({ user: req.user._id }).then((data) => {
+      data.map(async (itm) => {
+        await Cart.findOneAndDelete({ user: itm.user });
+      });
+    });
+
     return res.json(postOrder);
   } catch (error) {
     console.log(error);
