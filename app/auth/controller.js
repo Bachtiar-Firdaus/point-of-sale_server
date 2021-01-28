@@ -45,7 +45,9 @@ async function index(req, res, next) {
     let user = await User.find(criteria)
       .limit(parseInt(limit))
       .skip(parseInt(skip));
-    return res.json(user);
+
+    let count = await User.countDocuments(criteria);
+    return res.json({ data: user, count });
   } catch (error) {
     if (error && error.name === "ValidasiError") {
       return res.json({

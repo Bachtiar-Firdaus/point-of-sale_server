@@ -86,7 +86,9 @@ async function index(req, res, next) {
       .populate("category")
       .populate("variant")
       .populate("discount");
-    return res.json(products);
+
+    let count = await Product.countDocuments(criteria);
+    return res.json({ data: products, count });
   } catch (error) {
     if (error && error.name === "ValidationError") {
       return res.json({

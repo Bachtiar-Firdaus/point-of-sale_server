@@ -17,7 +17,9 @@ async function index(req, res, next) {
     let category = await Category.find(criteria)
       .limit(parseInt(limit))
       .skip(parseInt(skip));
-    return res.json(category);
+
+    let count = await Category.countDocuments(criteria);
+    return res.json({ data: category, count });
   } catch (error) {
     if (error && error.name === "ValidationError") {
       return res.json({

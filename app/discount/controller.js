@@ -19,7 +19,9 @@ async function index(req, res, next) {
     let discount = await Discount.find(criteria)
       .limit(parseInt(limit))
       .skip(parseInt(skip));
-    return res.json(discount);
+
+    let count = await Discount.countDocuments(criteria);
+    return res.json({ data: discount, count });
   } catch (error) {
     next(error);
   }

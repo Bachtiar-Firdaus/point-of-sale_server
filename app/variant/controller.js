@@ -26,7 +26,8 @@ async function index(req, res, next) {
       .limit(parseInt(limit))
       .skip(parseInt(skip));
 
-    return res.json(variant);
+    let count = await Variant.countDocuments(criteria);
+    return res.json({ data: variant, count });
   } catch (error) {
     if (error && error.name === "ValidationError") {
       return res.json({
