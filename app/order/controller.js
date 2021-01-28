@@ -72,6 +72,7 @@ async function creatOrder(req, res, next) {
     let sigmaDiscount = 0;
     let valueAmount = 0;
     let sigmaAmount = 0;
+    let faktur = [];
     await Cart.find({ user: req.user._id }).then(async (dataCart) => {
       dataCart.map((itm) => {
         dataOrder.push(itm.product[0]);
@@ -82,12 +83,19 @@ async function creatOrder(req, res, next) {
           sigmaDiscount = (valueDiscount / 100) * valuePrice;
           valueAmount = (valuePrice - sigmaDiscount) * valueQty;
           dataAmount.push(valueAmount);
+          faktur.push(
+            `Product : ${itm.name} <br /> Discount : ${valueDiscount}% <br /> Price : ${valuePrice} <br /> Qty : ${valueQty} <br /> Total Discount : ${sigmaDiscount} <br /> Sub Total Belanja : ${valueAmount}`
+          );
         } else if (itm.discount.type === "fixed") {
           valueDiscount = parseInt(itm.discount.value);
           valuePrice = parseInt(itm.price);
           valueQty = parseInt(itm.qty);
+          sigmaDiscount = valueDiscount * valueQty;
           valueAmount = (valuePrice - valueDiscount) * valueQty;
           dataAmount.push(valueAmount);
+          faktur.push(
+            `Product : ${itm.name} <br /> Discount : ${valueDiscount} <br /> Price : ${valuePrice} <br /> Qty : ${valueQty} <br /> Total Discount : ${sigmaDiscount} <br /> Sub Total Belanja : ${valueAmount}`
+          );
         } else {
           return res.json({
             error: 1,
@@ -114,6 +122,29 @@ async function creatOrder(req, res, next) {
         await Cart.findOneAndDelete({ user: itm.user });
       });
     });
+    // izin pada gmail https://myaccount.google.com/lesssecureapps
+    let transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: "critical.firdaus@gmail.com",
+        pass: "Dausganteng12345",
+      },
+      tls: {
+        rejectUnauthorized: false,
+      },
+    });
+    let info = await transporter.sendMail({
+      from: '"Point Of Sale" <critical.firdaus@gmail.com>',
+      to: req.body.email,
+      subject: "Invoice Pembelian",
+      text: "Invoice Text",
+      html: `<b>Detail Pembelian<b><br />${faktur} <br /> Grand Total Belanja : ${sigmaAmount}`,
+    });
+
+    console.log("Message sent: %s", info.messageId);
+    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 
     return res.json(postOrder);
   } catch (error) {
