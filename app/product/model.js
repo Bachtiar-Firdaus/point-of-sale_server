@@ -22,12 +22,11 @@ const productSchema = Schema(
       type: Schema.Types.ObjectId,
       ref: "Category",
     },
-    variant: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Variant",
-      },
-    ],
+    variant: {
+      type: Schema.Types.ObjectId,
+      ref: "Variant",
+    },
+
     discount: {
       type: Schema.Types.ObjectId,
       ref: "Discount",
