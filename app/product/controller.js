@@ -76,7 +76,14 @@ async function index(req, res, next) {
         message: `Kamu Belum Login atau token tidak berlaku lagi`,
       });
     }
-    let { limit = 10, skip = 0, q = "", category = "" } = req.query;
+    let {
+      limit = 10,
+      skip = 0,
+      q = "",
+      category = "",
+      sort = "",
+      time = "",
+    } = req.query;
     let criteria = {};
     if (q.length) {
       criteria = { ...criteria, name: { $regex: `${q}`, $options: "i" } };
@@ -89,7 +96,13 @@ async function index(req, res, next) {
         criteria = { ...criteria, category: category._id };
       }
     }
+    if (sort === -1 || sort === 1) {
+      sort = { name: sort };
+    } else {
+      sort = { createdAt: time };
+    }
     let products = await Product.find(criteria)
+      .sort(sort)
       .limit(parseInt(limit))
       .skip(parseInt(skip))
       .populate("category")
