@@ -19,7 +19,7 @@ async function index(req, res, next) {
         message: "Anda Tidak Memiliki Akses Untuk Melihat History Order",
       });
     }
-    let { limit = 10, skip = 10, q = "" } = req.query;
+    let { limit = 10, skip = 0, q = "" } = req.query;
     let criteria = {};
     if (q.length) {
       criteria = { ...criteria, date: { $regex: `${q}`, $options: "i" } };
