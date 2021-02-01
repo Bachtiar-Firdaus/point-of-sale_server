@@ -96,7 +96,7 @@ async function index(req, res, next) {
         criteria = { ...criteria, category: category._id };
       }
     }
-    if (sort === -1 || sort === 1) {
+    if (sort === "-1" || sort === "1") {
       sort = { name: sort };
     } else {
       sort = { createdAt: time };
