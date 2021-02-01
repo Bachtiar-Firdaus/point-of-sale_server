@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 const Product = require("./model");
+const Category = require("../category/model");
 const config = require("../config");
 
 const { policyFor } = require("../policy");
@@ -75,10 +76,18 @@ async function index(req, res, next) {
         message: `Kamu Belum Login atau token tidak berlaku lagi`,
       });
     }
-    let { limit = 10, skip = 0, q = "" } = req.query;
+    let { limit = 10, skip = 0, q = "", category = "" } = req.query;
     let criteria = {};
     if (q.length) {
       criteria = { ...criteria, name: { $regex: `${q}`, $options: "i" } };
+    }
+    if (category.length) {
+      category = await Category.findOne({
+        name: { $regex: `${category}`, $options: "i" },
+      });
+      if (category) {
+        criteria = { ...criteria, category: category._id };
+      }
     }
     let products = await Product.find(criteria)
       .limit(parseInt(limit))
