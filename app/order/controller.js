@@ -97,10 +97,13 @@ async function creatOrder(req, res, next) {
             `Product : ${itm.name} <br /> Discount : ${valueDiscount} <br /> Price : ${valuePrice} <br /> Qty : ${valueQty} <br /> Total Discount : ${sigmaDiscount} <br /> Sub Total Belanja : ${valueAmount}`
           );
         } else {
-          return res.json({
-            error: 1,
-            message: "Type Discount Tidak Terdefinisi",
-          });
+          valuePrice = parseInt(itm.price);
+          valueQty = parseInt(itm.qty);
+          valueAmount = valuePrice * valueQty;
+          dataAmount.push(valueAmount);
+          faktur.push(
+            `Product : ${itm.name} <br /> Discount : ${valueDiscount} <br /> Price : ${valuePrice} <br /> Qty : ${valueQty} <br /> Total Discount : ${sigmaDiscount} <br /> Sub Total Belanja : ${valueAmount}`
+          );
         }
       });
     });
