@@ -27,7 +27,8 @@ async function index(req, res, next) {
     let dataOrder = await Order.find(criteria)
       .limit(parseInt(limit))
       .skip(parseInt(skip));
-    return res.json(dataOrder);
+    let count = await Order.countDocuments(criteria);
+    return res.json({ data: dataOrder, count });
   } catch (error) {
     next(error);
   }

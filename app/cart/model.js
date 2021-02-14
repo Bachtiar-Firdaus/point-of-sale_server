@@ -32,6 +32,10 @@ const cartSchema = Schema(
       stock: { type: Number },
     },
 
+    idVariantOption: {
+      type: String,
+    },
+
     qty: {
       type: Number,
       required: [true, "qty harus di isi"],

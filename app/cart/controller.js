@@ -10,7 +10,7 @@ async function index(req, res, next) {
         message: "Anda Belum Login Atau Token Expired",
       });
     }
-    let cart = await Cart.find().populate("product");
+    let cart = await Cart.find({ user: req.user }).populate("product");
     return res.json(cart);
   } catch (error) {
     next(error);
@@ -46,7 +46,7 @@ async function cart(req, res, next) {
         stock: item.variantStock,
       };
       return {
-        _id: realtedProduct._id,
+        idVariantOption: item.idVariantOption,
         product: realtedProduct._id,
         price: realtedProduct.price,
         image_url: realtedProduct.image_url,
@@ -62,7 +62,10 @@ async function cart(req, res, next) {
       cartItems.map((item) => {
         return {
           updateMany: {
-            filter: { user: req.user._id, product: item.product },
+            filter: {
+              user: req.user._id,
+              idVariantOption: item.idVariantOption,
+            },
             update: item,
             upsert: true,
           },

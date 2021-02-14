@@ -35,8 +35,8 @@ orderSchema.post("save", async function () {
   let idUser = this.user;
   await Cart.find({ user: idUser }).then(async (dataCart) => {
     dataCart.forEach((data) => {
-      Product.findOne({ _id: data._id }).then((res) => {
-        Variant.findOne({ _id: res.variant[0] }).then(async (variant) => {
+      Product.findOne({ _id: data.product }).then((res) => {
+        Variant.findOne({ _id: res.variant }).then(async (variant) => {
           variant.option.forEach((option) => {
             if (data.variant.option === option.name) {
               option.stock = option.stock - data.qty;
