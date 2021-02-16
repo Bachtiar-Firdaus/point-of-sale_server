@@ -112,7 +112,8 @@ async function register(req, res, next) {
     await user.save();
     return res.json(user);
   } catch (error) {
-    if (error && error.message === "ValidationError") {
+    console.log(error);
+    if (error) {
       return res.json({
         error: 1,
         message: error.message,
@@ -139,6 +140,12 @@ async function update(req, res, next) {
       });
     }
     let payload = req.body;
+    if (payload.password.length === 0) {
+      return res.json({
+        error: 1,
+        message: "Password Wajib Di Isi",
+      });
+    }
     let password = bcrypt.hashSync(payload.password, HASH_ROUND);
     let finalPayload = { ...payload, password };
     let user = await User.findOneAndUpdate(
@@ -151,7 +158,7 @@ async function update(req, res, next) {
     );
     return res.json(user);
   } catch (error) {
-    if (error && error.name === "ValidationError") {
+    if (error) {
       return res.json({
         error: 1,
         message: error.message,

@@ -207,9 +207,20 @@ async function update(req, res, next) {
       src.on("error", async () => {
         next(error);
       });
+    } else {
+      let product = await Product.findOneAndUpdate(
+        { _id: req.params.id },
+        payload,
+        { new: true, runValidators: true }
+      )
+        .populate("category")
+        .populate("variant")
+        .populate("discount");
+      return res.json(product);
     }
   } catch (error) {
-    if (error && error.name === "ValidationError") {
+    console.log(error);
+    if (error) {
       return res.json({
         error: 1,
         message: error.message,

@@ -19,6 +19,7 @@ const productSchema = Schema(
     price: {
       type: Number,
       default: 0,
+      required: [true, "Price harus diisi"],
     },
 
     image_url: String,
