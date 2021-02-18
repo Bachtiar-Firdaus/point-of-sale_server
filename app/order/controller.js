@@ -150,9 +150,6 @@ async function creatOrder(req, res, next) {
       html: `<b>Detail Pembelian<b><br />${faktur} <br /> Grand Total Belanja : ${sigmaAmount}`,
     });
 
-    console.log("Message sent: %s", info.messageId);
-    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-
     return res.json({ message: "succes", data: postOrder });
   } catch (error) {
     if (error && error.name === "ValidationError") {
