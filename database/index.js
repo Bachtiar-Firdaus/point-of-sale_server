@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
-const { dbHost, dbName, dbPort, dbUser, dbPass } = require("../app/config");
+const { dbHost, dbName, dbUser, dbPass } = require("../app/config");
 mongoose.connect(
-  `mongodb://${dbUser}:${dbPass}@${dbHost}:${dbPort}/${dbName}?authSource=admin`,
+  `mongodb+srv://${dbUser}:${dbPass}@${dbHost}/${dbName}?retryWrites=true&w=majority`,
   { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }
 );
 const db = mongoose.connection;
