@@ -44,7 +44,7 @@ async function store(req, res, next) {
       src.on("end", async () => {
         let product = new Product({ ...payload, image_url: filename });
         await product.save();
-        return res.json(product);
+        return res.json({ message: "succes", data: product });
       });
 
       src.on("error", async () => {
@@ -53,7 +53,7 @@ async function store(req, res, next) {
     } else {
       let product = new Product(payload);
       await product.save();
-      return res.json(product);
+      return res.json({ message: "succes", data: product });
     }
   } catch (error) {
     if (error && error.name === "ValidationError") {
@@ -110,16 +110,8 @@ async function index(req, res, next) {
       .populate("discount");
 
     let count = await Product.countDocuments(criteria);
-    return res.json({ data: products, count });
+    return res.json({ message: "succes", data: products, count });
   } catch (error) {
-    if (error && error.name === "ValidationError") {
-      return res.json({
-        error: 1,
-        message: error.message,
-        fields: error.errors,
-      });
-    }
-
     next(error);
   }
 }
@@ -138,16 +130,8 @@ async function singgleProduct(req, res, next) {
       .populate("category")
       .populate("variant")
       .populate("discount");
-    return res.json(products);
+    return res.json({ message: "succes", data: products });
   } catch (error) {
-    if (error && error.name === "ValidationError") {
-      return res.json({
-        error: 1,
-        message: error.message,
-        fields: error.errors,
-      });
-    }
-
     next(error);
   }
 }
@@ -201,7 +185,7 @@ async function update(req, res, next) {
           .populate("variant")
           .populate("discount");
 
-        return res.json(product);
+        return res.json({ message: "succes", data: product });
       });
 
       src.on("error", async () => {
@@ -216,11 +200,10 @@ async function update(req, res, next) {
         .populate("category")
         .populate("variant")
         .populate("discount");
-      return res.json(product);
+      return res.json({ message: "succes", data: product });
     }
   } catch (error) {
-    console.log(error);
-    if (error) {
+    if (error && error.name === "ValidationError") {
       return res.json({
         error: 1,
         message: error.message,
@@ -257,7 +240,7 @@ async function destroy(req, res, next) {
     if (fs.existsSync(currentImage)) {
       fs.unlinkSync(currentImage);
     }
-    return res.json(product);
+    return res.json({ message: "succes", data: product });
   } catch (error) {
     next(error);
   }

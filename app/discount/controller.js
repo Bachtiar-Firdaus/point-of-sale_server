@@ -21,7 +21,7 @@ async function index(req, res, next) {
       .skip(parseInt(skip));
 
     let count = await Discount.countDocuments(criteria);
-    return res.json({ data: discount, count });
+    return res.json({ message: "succes", data: discount, count });
   } catch (error) {
     next(error);
   }
@@ -36,7 +36,7 @@ async function singgleDiscount(req, res, json) {
       });
     }
     let findDiscount = await Discount.findOne({ _id: req.params.id });
-    return res.json(findDiscount);
+    return res.json({ message: "succes", data: findDiscount });
   } catch (error) {
     next(error);
   }
@@ -60,7 +60,8 @@ async function createDiscount(req, res, next) {
     let payload = req.body;
     let postDiscount = new Discount(payload);
     await postDiscount.save();
-    return res.json(postDiscount);
+
+    return res.json({ message: "succes", data: postDiscount });
   } catch (error) {
     if (error && error.name === "ValidationError") {
       return res.json({
@@ -147,7 +148,7 @@ async function addProductToDiscount(req, res, next) {
       }
     );
 
-    return res.json(discount);
+    return res.json({ message: "succes", data: discount });
   } catch (error) {
     if (error && error.name === "ValidationError") {
       return res.json({
@@ -186,7 +187,8 @@ async function updateDiscount(req, res, next) {
         runValidators: true,
       }
     );
-    return res.json(updatedDiscont);
+
+    return res.json({ message: "succes", data: updatedDiscont });
   } catch (error) {
     if (error && error.name === "ValidationError") {
       return res.json({
@@ -217,7 +219,8 @@ async function destroyDiscount(req, res, next) {
     let deleteDiscount = await Discount.findOneAndDelete({
       _id: req.params.id,
     });
-    return res.json(deleteDiscount);
+
+    return res.json({ message: "succes", data: deleteDiscount });
   } catch (error) {
     next(error);
   }

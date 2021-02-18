@@ -11,7 +11,7 @@ async function index(req, res, next) {
       });
     }
     let cart = await Cart.find({ user: req.user }).populate("product");
-    return res.json(cart);
+    return res.json({ message: "succes", data: cart });
   } catch (error) {
     next(error);
   }
@@ -72,7 +72,8 @@ async function cart(req, res, next) {
         };
       })
     );
-    return res.json(cartItems);
+
+    return res.json({ message: "succes", data: cartItems });
   } catch (error) {
     if (error && error.name === "ValidationError") {
       return res.json({

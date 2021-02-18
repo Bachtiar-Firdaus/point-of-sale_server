@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const multer = require("multer");
 const passport = require("passport");
+const { validateAuth } = require("../middleware/validator");
 const localStrategy = require("passport-local").Strategy;
 
 const authController = require("./controller");
@@ -12,8 +13,13 @@ passport.use(
 router.get("/user", authController.index);
 router.get("/me", authController.me);
 router.get("/user/:id", authController.singgleUser);
-router.put("/user/:id", multer().none(), authController.update);
-router.post("/register", multer().none(), authController.register);
+router.put("/user/:id", validateAuth, multer().none(), authController.update);
+router.post(
+  "/register",
+  validateAuth,
+  multer().none(),
+  authController.register
+);
 router.delete("/delete/:id", authController.destroy);
 router.post("/login", multer().none(), authController.login);
 router.post("/logout", authController.logout);

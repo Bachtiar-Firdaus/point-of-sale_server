@@ -19,15 +19,8 @@ async function index(req, res, next) {
       .skip(parseInt(skip));
 
     let count = await Category.countDocuments(criteria);
-    return res.json({ data: category, count });
+    return res.json({ message: "succes", data: category, count });
   } catch (error) {
-    if (error && error.name === "ValidationError") {
-      return res.json({
-        error: 1,
-        message: error.message,
-        fields: error.errors,
-      });
-    }
     next(error);
   }
 }
@@ -42,7 +35,7 @@ async function singgleCategory(req, res, next) {
     }
     let id = req.params.id;
     let category = await Category.findOne({ _id: id });
-    return res.json(category);
+    return res.json({ message: "succes", data: category });
   } catch (error) {
     next(error);
   }
@@ -66,7 +59,7 @@ async function category(req, res, next) {
     let payload = req.body;
     let category = new Category(payload);
     await category.save();
-    return res.json(category);
+    return res.json({ message: "succes", data: category });
   } catch (error) {
     if (error && error.name === "ValidationError") {
       return res.json({
@@ -100,7 +93,7 @@ async function update(req, res, next) {
       payload,
       { new: true, runValidators: true }
     );
-    return res.json(category);
+    return res.json({ message: "succes", data: category });
   } catch (error) {
     if (error && error.name === "ValidationError") {
       return res.json({
@@ -130,15 +123,8 @@ async function destroy(req, res, next) {
       });
     }
     let deleted = await Category.findOneAndDelete({ _id: req.params.id });
-    return res.json(deleted);
+    return res.json({ message: "succes", data: deleted });
   } catch (error) {
-    if (error && error.name === "ValidationError") {
-      return res.json({
-        error: 1,
-        message: error.message,
-        fields: error.errors,
-      });
-    }
     next(error);
   }
 }

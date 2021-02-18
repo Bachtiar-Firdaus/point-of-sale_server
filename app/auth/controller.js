@@ -18,7 +18,8 @@ function me(req, res, next) {
       message: `Your're not login or token expired`,
     });
   }
-  return res.json(req.user);
+
+  return res.json({ message: "succes", data: req.user });
 }
 
 //pembatasan hanya untuk admin
@@ -47,15 +48,8 @@ async function index(req, res, next) {
       .skip(parseInt(skip));
 
     let count = await User.countDocuments(criteria);
-    return res.json({ data: user, count });
+    return res.json({ message: "succes", data: user, count });
   } catch (error) {
-    if (error && error.name === "ValidasiError") {
-      return res.json({
-        error: 1,
-        message: error.message,
-        fields: error.errors,
-      });
-    }
     next(error);
   }
 }
@@ -77,15 +71,8 @@ async function singgleUser(req, res, next) {
     }
     let id = req.params.id;
     let user = await User.findOne({ _id: id });
-    return res.json(user);
+    return res.json({ message: "succes", data: user });
   } catch (error) {
-    if (error && error.name === "ValidasiError") {
-      return res.json({
-        error: 1,
-        message: error.message,
-        fields: error.errors,
-      });
-    }
     next(error);
   }
 }
@@ -100,7 +87,6 @@ async function register(req, res, next) {
       });
     }
     let policy = policyFor(req.user);
-    console.log(req.user);
     if (!policy.can("manage", "all")) {
       return res.json({
         error: 1,
@@ -108,12 +94,16 @@ async function register(req, res, next) {
       });
     }
     const payload = req.body;
-    let user = new User(payload);
-    await user.save();
-    return res.json(user);
+    let cekEmail = await User.find({ email: payload.email });
+    if (!cekEmail.length) {
+      let user = new User(payload);
+      await user.save();
+      return res.json({ message: "succes", data: user });
+    } else if (cekEmail.length) {
+      return res.json({ error: 1, message: "failed email telah terdaftar" });
+    }
   } catch (error) {
-    console.log(error);
-    if (error) {
+    if (error && error.name === "ValidationError") {
       return res.json({
         error: 1,
         message: error.message,
@@ -156,9 +146,9 @@ async function update(req, res, next) {
         runValidators: true,
       }
     );
-    return res.json(user);
+    return res.json({ message: "succes", data: user });
   } catch (error) {
-    if (error) {
+    if (error && error.name === "ValidationError") {
       return res.json({
         error: 1,
         message: error.message,
@@ -187,7 +177,8 @@ async function destroy(req, res, next) {
       });
     }
     let user = await User.findOneAndDelete({ _id: req.params.id });
-    return res.json(user);
+
+    return res.json({ message: "succes", data: user });
   } catch (error) {
     next(error);
   }

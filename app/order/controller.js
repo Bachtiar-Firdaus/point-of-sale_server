@@ -22,13 +22,16 @@ async function index(req, res, next) {
     let { limit = 10, skip = 0, q = "" } = req.query;
     let criteria = {};
     if (q.length) {
-      criteria = { ...criteria, date: { $regex: `${q}`, $options: "i" } };
+      criteria = {
+        ...criteria,
+        nama_lengkap: { $regex: `${q}`, $options: "i" },
+      };
     }
     let dataOrder = await Order.find(criteria)
       .limit(parseInt(limit))
       .skip(parseInt(skip));
     let count = await Order.countDocuments(criteria);
-    return res.json({ data: dataOrder, count });
+    return res.json({ message: "succes", data: dataOrder, count });
   } catch (error) {
     next(error);
   }
@@ -150,9 +153,15 @@ async function creatOrder(req, res, next) {
     console.log("Message sent: %s", info.messageId);
     console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 
-    return res.json(postOrder);
+    return res.json({ message: "succes", data: postOrder });
   } catch (error) {
-    console.log(error);
+    if (error && error.name === "ValidationError") {
+      return res.json({
+        error: 1,
+        message: error.message,
+        fields: error.errors,
+      });
+    }
     next(error);
   }
 }

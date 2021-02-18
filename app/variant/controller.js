@@ -27,15 +27,9 @@ async function index(req, res, next) {
       .skip(parseInt(skip));
 
     let count = await Variant.countDocuments(criteria);
-    return res.json({ data: variant, count });
+
+    return res.json({ message: "succes", data: variant, count });
   } catch (error) {
-    if (error && error.name === "ValidationError") {
-      return res.json({
-        error: 1,
-        message: error.message,
-        fields: error.errors,
-      });
-    }
     next(error);
   }
 }
@@ -57,7 +51,8 @@ async function singleVariant(req, res, next) {
     }
 
     let single = await Variant.findOne({ _id: req.params.id });
-    return res.json(single);
+
+    return res.json({ message: "succes", data: single });
   } catch (error) {
     next(error);
   }
@@ -81,7 +76,8 @@ async function variant(req, res, next) {
     let payload = req.body;
     let variant = new Variant(payload);
     await variant.save();
-    return res.json(variant);
+
+    return res.json({ message: "succes", data: variant });
   } catch (error) {
     if (error && error.name === "ValidationError") {
       return res.json({
@@ -90,7 +86,6 @@ async function variant(req, res, next) {
         fields: error.errors,
       });
     }
-
     next(error);
   }
 }
@@ -116,7 +111,7 @@ async function update(req, res, next) {
       payload,
       { new: true, runValidators: true }
     );
-    return res.json(variant);
+    return res.json({ message: "succes", data: variant });
   } catch (error) {
     if (error && error.name === "ValidationError") {
       return res.json({
@@ -146,7 +141,7 @@ async function destroy(req, res, next) {
       });
     }
     let deleted = await Variant.findOneAndDelete({ _id: req.params.id });
-    return res.json(deleted);
+    return res.json({ message: "succes", data: deleted });
   } catch (error) {
     next(error);
   }
