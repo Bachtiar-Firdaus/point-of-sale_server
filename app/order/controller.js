@@ -77,6 +77,7 @@ async function creatOrder(req, res, next) {
     let valueAmount = 0;
     let sigmaAmount = 0;
     let faktur = [];
+    let faktur_db = [];
     await Cart.find({ user: req.user._id }).then(async (dataCart) => {
       dataCart.map((itm) => {
         dataOrder.push(itm.product[0]);
@@ -90,6 +91,16 @@ async function creatOrder(req, res, next) {
           faktur.push(
             `Product : ${itm.name} <br /> Discount : ${valueDiscount}% <br /> Price : ${valuePrice} <br /> Qty : ${valueQty} <br /> Total Discount : ${sigmaDiscount} <br /> Sub Total Belanja : ${valueAmount}`
           );
+          faktur_db.push({
+            Product: itm.name,
+            Variant_Name: itm.variant.name,
+            VariantOption: itm.variant.option,
+            Qty: valueQty,
+            Discount: valueDiscount + " %",
+            Price: valuePrice,
+            Total_Discount: sigmaDiscount,
+            Sub_Total_Belanja: valueAmount,
+          });
         } else if (itm.discount.type === "fixed") {
           valueDiscount = parseInt(itm.discount.value);
           valuePrice = parseInt(itm.price);
@@ -100,14 +111,34 @@ async function creatOrder(req, res, next) {
           faktur.push(
             `Product : ${itm.name} <br /> Discount : ${valueDiscount} <br /> Price : ${valuePrice} <br /> Qty : ${valueQty} <br /> Total Discount : ${sigmaDiscount} <br /> Sub Total Belanja : ${valueAmount}`
           );
+          faktur_db.push({
+            Product: itm.name,
+            Variant_Name: itm.variant.name,
+            VariantOption: itm.variant.option,
+            Qty: valueQty,
+            Discount: valueDiscount,
+            Price: valuePrice,
+            Total_Discount: sigmaDiscount,
+            Sub_Total_Belanja: valueAmount,
+          });
         } else {
           valuePrice = parseInt(itm.price);
           valueQty = parseInt(itm.qty);
           valueAmount = valuePrice * valueQty;
           dataAmount.push(valueAmount);
           faktur.push(
-            `Product : ${itm.name} <br /> Discount : ${valueDiscount} <br /> Price : ${valuePrice} <br /> Qty : ${valueQty} <br /> Total Discount : ${sigmaDiscount} <br /> Sub Total Belanja : ${valueAmount}`
+            `Product : ${itm.name} <br /> Discount : - <br /> Price : ${valuePrice} <br /> Qty : ${valueQty} <br /> Total Discount : ${sigmaDiscount} <br /> Sub Total Belanja : ${valueAmount}`
           );
+          faktur_db.push({
+            Product: itm.name,
+            Variant_Name: itm.variant.name,
+            VariantOption: itm.variant.option,
+            Qty: valueQty,
+            Discount: "-",
+            Price: valuePrice,
+            Total_Discount: sigmaDiscount,
+            Sub_Total_Belanja: valueAmount,
+          });
         }
       });
     });
@@ -117,10 +148,11 @@ async function creatOrder(req, res, next) {
     let postOrder = new Order({
       _id: new mongoose.Types.ObjectId(),
       nama_lengkap,
-      orders: [{ faktur }],
+      orders: faktur_db,
       amount: sigmaAmount,
       email,
       user: req.user._id,
+      date: Date.now(),
     });
     await postOrder.save();
 

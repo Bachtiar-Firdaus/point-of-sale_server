@@ -19,9 +19,33 @@ const orderSchema = Schema({
   date: {
     type: Date,
   },
+
   orders: [
     {
-      type: String,
+      Product: {
+        type: String,
+      },
+      Variant_Name: {
+        type: String,
+      },
+      VariantOption: {
+        type: String,
+      },
+      Qty: {
+        type: Number,
+      },
+      Discount: {
+        type: String,
+      },
+      Price: {
+        type: Number,
+      },
+      Total_Discount: {
+        type: Number,
+      },
+      Sub_Total_Belanja: {
+        type: Number,
+      },
     },
   ],
   amount: {
