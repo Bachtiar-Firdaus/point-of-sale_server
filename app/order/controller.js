@@ -117,7 +117,7 @@ async function creatOrder(req, res, next) {
     let postOrder = new Order({
       _id: new mongoose.Types.ObjectId(),
       nama_lengkap,
-      orders: dataOrder,
+      orders: [{ faktur }],
       amount: sigmaAmount,
       email,
       user: req.user._id,
@@ -149,6 +149,9 @@ async function creatOrder(req, res, next) {
       text: "Invoice Text",
       html: `<b>Detail Pembelian<b><br />${faktur} <br /> Grand Total Belanja : ${sigmaAmount}`,
     });
+
+    console.log("Message sent: %s", info.messageId);
+    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 
     return res.json({ message: "succes", data: postOrder });
   } catch (error) {
