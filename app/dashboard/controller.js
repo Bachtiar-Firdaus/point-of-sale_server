@@ -36,7 +36,6 @@ function todaysIncome(req, res, next) {
     next(error);
   }
 }
-
 function weeklyIncome(req, res, next) {
   try {
     if (!req.user) {
@@ -49,7 +48,7 @@ function weeklyIncome(req, res, next) {
     if (!policy.can("manage", "all")) {
       return res.json({
         error: 1,
-        message: "Anda Tidak Memiliki Akses Untuk Melihat monthlyIncome",
+        message: "Anda Tidak Memiliki Akses Untuk Melihat weeklyIncome",
       });
     }
     let { date = "" } = req.query;
@@ -143,4 +142,5 @@ function monthlyIncome(req, res, next) {
     next(error);
   }
 }
+
 module.exports = { todaysIncome, monthlyIncome, weeklyIncome };
