@@ -1,6 +1,8 @@
 const { policyFor } = require("../policy");
 const History = require("../order/model");
+const User = require("../user/model");
 const moment = require("moment");
+const { check } = require("express-validator");
 function todaysIncome(req, res, next) {
   try {
     if (!req.user) {
@@ -143,4 +145,37 @@ function monthlyIncome(req, res, next) {
   }
 }
 
-module.exports = { todaysIncome, monthlyIncome, weeklyIncome };
+async function userActive(req, res, next) {
+  try {
+    if (!req.user) {
+      return res.json({
+        error: 1,
+        message: "Anda Belum Login atau Token Expired",
+      });
+    }
+    let policy = policyFor(req.user);
+    if (!policy.can("manage", "all")) {
+      return res.json({
+        error: 1,
+        message: "Anda Tidak Memiliki Akses Untuk Melihat userActive",
+      });
+    }
+    let bucketUser = [];
+    let userActive = await User.find();
+    userActive.map((value_user) => {
+      if (value_user.token.length !== 0) {
+        userActive = value_user.full_name;
+      }
+      bucketUser.push({ name: `${userActive}`, status: "Active" });
+    });
+    console.log();
+    return res.json({
+      message: "succes",
+      data: bucketUser,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = { todaysIncome, monthlyIncome, weeklyIncome, userActive };
