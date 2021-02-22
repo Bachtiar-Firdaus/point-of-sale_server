@@ -22,7 +22,6 @@ function todaysIncome(req, res, next) {
     if (!date.length) {
       valueDate = moment().format("YYYY-MM-DD");
     }
-    console.log(valueDate);
     let todaysIncome = 0;
     History.find({ date: valueDate }).then((check_date) => {
       check_date.map((dataAmount) => {
@@ -37,4 +36,43 @@ function todaysIncome(req, res, next) {
     next(error);
   }
 }
-module.exports = { todaysIncome };
+
+function monthlyIncome(req, res, next) {
+  try {
+    if (!req.user) {
+      return res.json({
+        error: 1,
+        message: "Anda Belum Login atau Token Expired",
+      });
+    }
+    let policy = policyFor(req.user);
+    if (!policy.can("manage", "all")) {
+      return res.json({
+        error: 1,
+        message: "Anda Tidak Memiliki Akses Untuk Melihat monthlyIncome",
+      });
+    }
+    let { date = "" } = req.query;
+    let valueDate = "";
+    valueDate = date;
+    if (!date.length) {
+      valueDate = moment().format("YYYY-MM-DD");
+    }
+    let data = valueDate.toString();
+    valueDate = data.substr(4, 4);
+    let valueResMoon = data.substr(5, 2);
+    let monthlyIncome = 0;
+    History.find({ date: { $regex: `${valueDate}` } }).then((check_date) => {
+      check_date.map((dataAmount) => {
+        monthlyIncome = monthlyIncome + dataAmount.amount;
+      });
+      return res.json({
+        message: "succes",
+        data: { Moon: valueResMoon, sigmaMonthlyIncome: monthlyIncome },
+      });
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+module.exports = { todaysIncome, monthlyIncome };
