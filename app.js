@@ -9,6 +9,7 @@ const cors = require("cors");
 // var indexRouter = require('./routes/index');
 // var usersRouter = require('./routes/users');
 // custom router
+const dashboardRouter = require("./app/dashboard/router");
 const orderRouter = require("./app/order/router");
 const discountRouter = require("./app/discount/router");
 const cartRouter = require("./app/cart/router");
@@ -40,6 +41,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 app.use(decodeToken());
 
+app.use("/api", dashboardRouter);
 app.use("/api", orderRouter);
 app.use("/api", discountRouter);
 app.use("/api", cartRouter);
