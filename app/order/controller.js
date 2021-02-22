@@ -1,3 +1,4 @@
+const moment = require("moment");
 const mongoose = require("mongoose");
 const { policyFor } = require("../policy");
 const Order = require("./model");
@@ -152,7 +153,7 @@ async function creatOrder(req, res, next) {
       amount: sigmaAmount,
       email,
       user: req.user._id,
-      date: Date.now(),
+      date: moment().format("YYYY-MM-DD"),
     });
     await postOrder.save();
 

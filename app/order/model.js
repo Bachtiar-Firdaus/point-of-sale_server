@@ -17,7 +17,7 @@ const orderSchema = Schema({
     ref: "user",
   },
   date: {
-    type: Date,
+    type: String,
   },
 
   orders: [
