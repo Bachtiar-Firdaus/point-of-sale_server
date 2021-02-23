@@ -1,6 +1,7 @@
 const { policyFor } = require("../policy");
 const History = require("../order/model");
 const User = require("../user/model");
+const Product = require("../product/model");
 const moment = require("moment");
 const { check } = require("express-validator");
 function todaysIncome(req, res, next) {
@@ -176,5 +177,41 @@ async function userActive(req, res, next) {
     next(error);
   }
 }
+async function bestSeller(req, res, next) {
+  try {
+    if (!req.user) {
+      return res.json({
+        error: 1,
+        message: "Anda Belum Login atau Token Expired",
+      });
+    }
+    let policy = policyFor(req.user);
+    if (!policy.can("manage", "all")) {
+      return res.json({
+        error: 1,
+        message: "Anda Tidak Memiliki Akses Untuk Melihat BestSeller",
+      });
+    }
+    let product = await Product.find()
+      .sort({ goods_sold: "-1" })
+      .limit(3)
+      .populate("category")
+      .populate("variant")
+      .populate("discount");
 
-module.exports = { todaysIncome, monthlyIncome, weeklyIncome, userActive };
+    // console.log(product);
+    return res.json({
+      message: "succes",
+      data: product,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+module.exports = {
+  todaysIncome,
+  monthlyIncome,
+  weeklyIncome,
+  userActive,
+  bestSeller,
+};
