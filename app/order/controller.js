@@ -94,6 +94,7 @@ async function creatOrder(req, res, next) {
           );
           faktur_db.push({
             Product: itm.name,
+            Category_Name: itm.categoryName,
             Variant_Name: itm.variant.name,
             VariantOption: itm.variant.option,
             Qty: valueQty,
@@ -114,6 +115,7 @@ async function creatOrder(req, res, next) {
           );
           faktur_db.push({
             Product: itm.name,
+            Category_Name: itm.categoryName,
             Variant_Name: itm.variant.name,
             VariantOption: itm.variant.option,
             Qty: valueQty,
@@ -132,6 +134,7 @@ async function creatOrder(req, res, next) {
           );
           faktur_db.push({
             Product: itm.name,
+            Category_Name: itm.categoryName,
             Variant_Name: itm.variant.name,
             VariantOption: itm.variant.option,
             Qty: valueQty,
