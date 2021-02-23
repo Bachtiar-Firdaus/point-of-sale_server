@@ -211,7 +211,7 @@ async function bestSeller(req, res, next) {
     next(error);
   }
 }
-function salesStatisticsProducts(req, res, next) {
+function salesStatistics(req, res, next) {
   try {
     if (!req.user) {
       return res.json({
@@ -227,7 +227,7 @@ function salesStatisticsProducts(req, res, next) {
           "Anda Tidak Memiliki Akses Untuk Melihat Sales Statistics Products",
       });
     }
-    let { date = "", product = "" } = req.query;
+    let { date = "", product = "", category = "" } = req.query;
     let valueDate = "";
     valueDate = date;
     if (!date.length) {
@@ -324,6 +324,8 @@ function salesStatisticsProducts(req, res, next) {
     let Thursday = 0;
     let Friday = 0;
     let Saturday = 0;
+    let indicatorData = "";
+    let valueIndicatorData = "";
 
     let bultStatistics = [];
     History.find({ date: { $gte: `${start}`, $lt: `${end}` } }).then(
@@ -332,37 +334,81 @@ function salesStatisticsProducts(req, res, next) {
           dataStatistics.orders.map((built) => {
             bultStatistics.push({
               date: dataStatistics.date,
-              name: built.Product,
+              product: built.Product,
+              category: built.Category_Name,
               sigma: built.Sub_Total_Belanja,
             });
           });
         });
         bultStatistics.map((rebuilt) => {
-          if (rebuilt.date === dateMonday && rebuilt.name === product) {
-            Monday = Monday + rebuilt.sigma;
-          } else if (rebuilt.date === dateTuesday && rebuilt.name === product) {
-            Tuesday = Tuesday + rebuilt.sigma;
-          } else if (
-            rebuilt.date === dateWednesday &&
-            rebuilt.name === product
-          ) {
-            Wednesday = Wednesday + rebuilt.sigma;
-          } else if (
-            rebuilt.date === dateThursday &&
-            rebuilt.name === product
-          ) {
-            Thursday = Thursday + rebuilt.sigma;
-          } else if (rebuilt.date === dateFriday && rebuilt.name === product) {
-            Friday = Friday + rebuilt.sigma;
-          } else if (
-            rebuilt.date === dateSaturday &&
-            rebuilt.name === product
-          ) {
-            Saturday = Saturday + rebuilt.sigma;
+          if (product.length) {
+            indicatorData = "product";
+            valueIndicatorData = product;
+            if (rebuilt.date === dateMonday && rebuilt.product === product) {
+              Monday = Monday + rebuilt.sigma;
+            } else if (
+              rebuilt.date === dateTuesday &&
+              rebuilt.product === product
+            ) {
+              Tuesday = Tuesday + rebuilt.sigma;
+            } else if (
+              rebuilt.date === dateWednesday &&
+              rebuilt.product === product
+            ) {
+              Wednesday = Wednesday + rebuilt.sigma;
+            } else if (
+              rebuilt.date === dateThursday &&
+              rebuilt.product === product
+            ) {
+              Thursday = Thursday + rebuilt.sigma;
+            } else if (
+              rebuilt.date === dateFriday &&
+              rebuilt.product === product
+            ) {
+              Friday = Friday + rebuilt.sigma;
+            } else if (
+              rebuilt.date === dateSaturday &&
+              rebuilt.product === product
+            ) {
+              Saturday = Saturday + rebuilt.sigma;
+            }
+          } else if (category.length) {
+            indicatorData = "category";
+            valueIndicatorData = category;
+            if (rebuilt.date === dateMonday && rebuilt.category === category) {
+              Monday = Monday + rebuilt.sigma;
+            } else if (
+              rebuilt.date === dateTuesday &&
+              rebuilt.category === category
+            ) {
+              Tuesday = Tuesday + rebuilt.sigma;
+            } else if (
+              rebuilt.date === dateWednesday &&
+              rebuilt.category === category
+            ) {
+              Wednesday = Wednesday + rebuilt.sigma;
+            } else if (
+              rebuilt.date === dateThursday &&
+              rebuilt.category === category
+            ) {
+              Thursday = Thursday + rebuilt.sigma;
+            } else if (
+              rebuilt.date === dateFriday &&
+              rebuilt.category === category
+            ) {
+              Friday = Friday + rebuilt.sigma;
+            } else if (
+              rebuilt.date === dateSaturday &&
+              rebuilt.category === category
+            ) {
+              Saturday = Saturday + rebuilt.sigma;
+            }
           }
         });
         return res.json({
           message: "succes",
+          statistics: indicatorData,
+          indicator: valueIndicatorData,
           data: [
             { day: "Monday", value: Monday },
             { day: "Tuesday", value: Tuesday },
@@ -384,5 +430,5 @@ module.exports = {
   weeklyIncome,
   userActive,
   bestSeller,
-  salesStatisticsProducts,
+  salesStatistics,
 };
