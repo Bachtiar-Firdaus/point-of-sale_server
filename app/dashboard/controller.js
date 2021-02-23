@@ -223,7 +223,8 @@ function salesStatisticsProducts(req, res, next) {
     if (!policy.can("manage", "all")) {
       return res.json({
         error: 1,
-        message: "Anda Tidak Memiliki Akses Untuk Melihat BestSeller",
+        message:
+          "Anda Tidak Memiliki Akses Untuk Melihat Sales Statistics Products",
       });
     }
     let { date = "", product = "" } = req.query;
