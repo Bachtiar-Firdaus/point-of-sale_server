@@ -47,6 +47,7 @@ async function cart(req, res, next) {
       };
       return {
         idVariantOption: item.idVariantOption,
+        categoryName: item.categoryName,
         product: realtedProduct._id,
         price: realtedProduct.price,
         image_url: realtedProduct.image_url,

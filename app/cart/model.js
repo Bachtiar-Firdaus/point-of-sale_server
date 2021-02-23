@@ -35,6 +35,9 @@ const cartSchema = Schema(
     idVariantOption: {
       type: String,
     },
+    categoryName: {
+      type: String,
+    },
 
     qty: {
       type: Number,
