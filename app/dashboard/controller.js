@@ -86,11 +86,9 @@ function weeklyIncome(req, res, next) {
     } else if (checkDay === "Saturday") {
       start = `${indicatorDay}${valueDay - 5}`;
       end = `${indicatorDay}${valueDay + 1}`;
-    } else {
-      return res.json({
-        error: 1,
-        message: "Hari Minggu Tidak Ada Data",
-      });
+    } else if (checkDay === "Sunday") {
+      start = `${indicatorDay}${valueDay - 6}`;
+      end = `${indicatorDay}${valueDay}`;
     }
     let weeklyIncome = 0;
     History.find({ date: { $gte: `${start}`, $lt: `${end}` } }).then(
@@ -308,11 +306,16 @@ function salesStatisticsProducts(req, res, next) {
       dateThursday = `${indicatorDay}${valueDay - 2}`;
       dateFriday = `${indicatorDay}${valueDay - 1}`;
       dateSaturday = `${indicatorDay}${valueDay}`;
-    } else {
-      return res.json({
-        error: 1,
-        message: "Hari Minggu Tidak Ada Data",
-      });
+    } else if (checkDay === "Sunday") {
+      start = `${indicatorDay}${valueDay - 6}`;
+      end = `${indicatorDay}${valueDay}`;
+
+      dateMonday = `${indicatorDay}${valueDay - 6}`;
+      dateTuesday = `${indicatorDay}${valueDay - 5}`;
+      dateWednesday = `${indicatorDay}${valueDay - 4}`;
+      dateThursday = `${indicatorDay}${valueDay - 3}`;
+      dateFriday = `${indicatorDay}${valueDay - 2}`;
+      dateSaturday = `${indicatorDay}${valueDay - 1}`;
     }
     let Monday = 0;
     let Tuesday = 0;
