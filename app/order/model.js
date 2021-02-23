@@ -25,6 +25,9 @@ const orderSchema = Schema({
       Product: {
         type: String,
       },
+      Category_Name: {
+        type: String,
+      },
       Variant_Name: {
         type: String,
       },
