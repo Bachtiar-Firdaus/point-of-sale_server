@@ -144,7 +144,6 @@ function monthlyIncome(req, res, next) {
     next(error);
   }
 }
-
 async function userActive(req, res, next) {
   try {
     if (!req.user) {

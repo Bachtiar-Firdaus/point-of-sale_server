@@ -22,6 +22,11 @@ const productSchema = Schema(
       required: [true, "Price harus diisi"],
     },
 
+    goods_sold: {
+      type: Number,
+      default: 0,
+    },
+
     image_url: String,
 
     //relational collection

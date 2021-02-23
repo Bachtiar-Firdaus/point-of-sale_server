@@ -59,14 +59,16 @@ orderSchema.post("save", async function () {
   let idUser = this.user;
   await Cart.find({ user: idUser }).then(async (dataCart) => {
     dataCart.forEach((data) => {
-      Product.findOne({ _id: data.product }).then((res) => {
+      Product.findOne({ _id: data.product }).then(async (res) => {
         Variant.findOne({ _id: res.variant }).then(async (variant) => {
-          variant.option.forEach((option) => {
+          variant.option.forEach(async (option) => {
+            res.goods_sold = res.goods_sold + data.qty;
             if (data.variant.option === option.name) {
               option.stock = option.stock - data.qty;
             }
           });
           await variant.save();
+          await res.save();
         });
       });
     });
