@@ -7,6 +7,31 @@ const config = require("../config");
 
 const { policyFor } = require("../policy");
 
+async function bestSeller(req, res, next) {
+  try {
+    if (!req.user) {
+      return res.json({
+        error: 1,
+        message: "Anda Belum Login atau Token Expired",
+      });
+    }
+
+    let product = await Product.find()
+      .sort({ goods_sold: "-1" })
+      .populate("category")
+      .populate("variant")
+      .populate("discount");
+
+    let productFilter = product.filter((product) => product.goods_sold > 0);
+    return res.json({
+      message: "succes",
+      data: productFilter,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 //Pembatasan Akses hanya untuk admin
 async function store(req, res, next) {
   try {
@@ -245,4 +270,4 @@ async function destroy(req, res, next) {
     next(error);
   }
 }
-module.exports = { store, index, update, destroy, singgleProduct };
+module.exports = { store, index, update, destroy, singgleProduct, bestSeller };

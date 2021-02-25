@@ -242,7 +242,6 @@ async function userActive(req, res, next) {
       }
       bucketUser.push({ name: `${userActive}`, status: "Active" });
     });
-    console.log();
     return res.json({
       message: "succes",
       data: bucketUser,
