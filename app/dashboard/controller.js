@@ -39,6 +39,98 @@ function todaysIncome(req, res, next) {
     next(error);
   }
 }
+function cekingDay(checkDay) {
+  let startValue;
+  let endValue;
+  let dateMondayValue;
+  let dateTuesdayValue;
+  let dateWednesdayValue;
+  let dateThursdayValue;
+  let dateFridayValue;
+  let dateSaturdayValue;
+  switch (checkDay) {
+    case "Monday":
+      startValue = 0;
+      endValue = 6;
+      dateMondayValue = 0;
+      dateTuesdayValue = 1;
+      dateWednesdayValue = 2;
+      dateThursdayValue = 3;
+      dateFridayValue = 4;
+      dateSaturdayValue = 5;
+      break;
+    case "Tuesday":
+      startValue = 1;
+      endValue = 5;
+      dateMondayValue = -1;
+      dateTuesdayValue = 0;
+      dateWednesdayValue = 1;
+      dateThursdayValue = 2;
+      dateFridayValue = 3;
+      dateSaturdayValue = 4;
+      break;
+    case "Wednesday":
+      startValue = 2;
+      endValue = 4;
+      dateMondayValue = -2;
+      dateTuesdayValue = -1;
+      dateWednesdayValue = 0;
+      dateThursdayValue = 1;
+      dateFridayValue = 2;
+      dateSaturdayValue = 3;
+      break;
+    case "Thursday":
+      startValue = 3;
+      endValue = 3;
+      dateMondayValue = -3;
+      dateTuesdayValue = -2;
+      dateWednesdayValue = -1;
+      dateThursdayValue = 0;
+      dateFridayValue = 1;
+      dateSaturdayValue = 2;
+      break;
+    case "Friday":
+      startValue = 4;
+      endValue = 2;
+      dateMondayValue = -4;
+      dateTuesdayValue = -3;
+      dateWednesdayValue = -2;
+      dateThursdayValue = -1;
+      dateFridayValue = 0;
+      dateSaturdayValue = 1;
+      break;
+    case "Saturday":
+      startValue = 5;
+      endValue = 1;
+      dateMondayValue = -5;
+      dateTuesdayValue = -4;
+      dateWednesdayValue = -3;
+      dateThursdayValue = -2;
+      dateFridayValue = -1;
+      dateSaturdayValue = 0;
+      break;
+    case "Sunday":
+      startValue = 6;
+      endValue = 0;
+      dateMondayValue = -6;
+      dateTuesdayValue = -5;
+      dateWednesdayValue = -4;
+      dateThursdayValue = -3;
+      dateFridayValue = -2;
+      dateSaturdayValue = -1;
+      break;
+  }
+  return {
+    startValue,
+    endValue,
+    dateMondayValue,
+    dateTuesdayValue,
+    dateWednesdayValue,
+    dateThursdayValue,
+    dateFridayValue,
+    dateSaturdayValue,
+  };
+}
 function weeklyIncome(req, res, next) {
   try {
     if (!req.user) {
@@ -61,35 +153,14 @@ function weeklyIncome(req, res, next) {
       valueDate = moment().format("YYYY-MM-DD");
     }
     let checkDay = moment(valueDate).format("dddd");
-    let stringDay = valueDate.toString();
-    let valueDay = stringDay.substr(8, 2);
-    let indicatorDay = stringDay.substr(0, 8);
-    valueDay = parseInt(valueDay);
-    let start = "";
-    let end = "";
+    let valueDay = cekingDay(checkDay);
 
-    if (checkDay === "Monday") {
-      start = valueDate;
-      end = `${indicatorDay}${valueDay + 6}`;
-    } else if (checkDay === "Tuesday") {
-      start = `${indicatorDay}${valueDay - 1}`;
-      end = `${indicatorDay}${valueDay + 5}`;
-    } else if (checkDay === "Wednesday") {
-      start = `${indicatorDay}${valueDay - 2}`;
-      end = `${indicatorDay}${valueDay + 4}`;
-    } else if (checkDay === "Thursday") {
-      start = `${indicatorDay}${valueDay - 3}`;
-      end = `${indicatorDay}${valueDay + 3}`;
-    } else if (checkDay === "Friday") {
-      start = `${indicatorDay}${valueDay - 4}`;
-      end = `${indicatorDay}${valueDay + 2}`;
-    } else if (checkDay === "Saturday") {
-      start = `${indicatorDay}${valueDay - 5}`;
-      end = `${indicatorDay}${valueDay + 1}`;
-    } else if (checkDay === "Sunday") {
-      start = `${indicatorDay}${valueDay - 6}`;
-      end = `${indicatorDay}${valueDay}`;
-    }
+    let start = moment(valueDate)
+      .subtract(`${valueDay.startValue}`, "days")
+      .format("YYYY-MM-DD");
+    let end = moment(valueDate)
+      .add(`${valueDay.endValue}`, "days")
+      .format("YYYY-MM-DD");
     let weeklyIncome = 0;
     History.find({ date: { $gte: `${start}`, $lt: `${end}` } }).then(
       (check_date) => {
@@ -234,90 +305,34 @@ function salesStatistics(req, res, next) {
       valueDate = moment().format("YYYY-MM-DD");
     }
     let checkDay = moment(valueDate).format("dddd");
-    let stringDay = valueDate.toString();
-    let valueDay = stringDay.substr(8, 2);
-    let indicatorDay = stringDay.substr(0, 8);
-    valueDay = parseInt(valueDay);
-    let start = "";
-    let end = "";
-    let dateMonday = "";
-    let dateTuesday = "";
-    let dateWednesday = "";
-    let dateThursday = "";
-    let dateFriday = "";
-    let dateSaturday = "";
+    let valueDay = cekingDay(checkDay);
 
-    if (checkDay === "Monday") {
-      start = valueDate;
-      end = `${indicatorDay}${valueDay + 6}`;
+    let start = moment(valueDate)
+      .subtract(`${valueDay.startValue}`, "days")
+      .format("YYYY-MM-DD");
+    let end = moment(valueDate)
+      .add(`${valueDay.endValue}`, "days")
+      .format("YYYY-MM-DD");
 
-      dateMonday = `${indicatorDay}${valueDay}`;
-      dateTuesday = `${indicatorDay}${valueDay + 1}`;
-      dateWednesday = `${indicatorDay}${valueDay + 2}`;
-      dateThursday = `${indicatorDay}${valueDay + 3}`;
-      dateFriday = `${indicatorDay}${valueDay + 4}`;
-      dateSaturday = `${indicatorDay}${valueDay + 5}`;
-    } else if (checkDay === "Tuesday") {
-      start = `${indicatorDay}${valueDay - 1}`;
-      end = `${indicatorDay}${valueDay + 5}`;
+    let dateMonday = moment(valueDate)
+      .add(`${valueDay.dateMondayValue}`, "days")
+      .format("YYYY-MM-DD");
+    let dateTuesday = moment(valueDate)
+      .add(`${valueDay.dateTuesdayValue}`, "days")
+      .format("YYYY-MM-DD");
+    let dateWednesday = moment(valueDate)
+      .add(`${valueDay.dateWednesdayValue}`, "days")
+      .format("YYYY-MM-DD");
+    let dateThursday = moment(valueDate)
+      .add(`${valueDay.dateThursdayValue}`, "days")
+      .format("YYYY-MM-DD");
+    let dateFriday = moment(valueDate)
+      .add(`${valueDay.dateFridayValue}`, "days")
+      .format("YYYY-MM-DD");
+    let dateSaturday = moment(valueDate)
+      .add(`${valueDay.dateSaturdayValue}`, "days")
+      .format("YYYY-MM-DD");
 
-      dateMonday = `${indicatorDay}${valueDay - 1}`;
-      dateTuesday = `${indicatorDay}${valueDay}`;
-      dateWednesday = `${indicatorDay}${valueDay + 1}`;
-      dateThursday = `${indicatorDay}${valueDay + 2}`;
-      dateFriday = `${indicatorDay}${valueDay + 3}`;
-      dateSaturday = `${indicatorDay}${valueDay + 4}`;
-    } else if (checkDay === "Wednesday") {
-      start = `${indicatorDay}${valueDay - 2}`;
-      end = `${indicatorDay}${valueDay + 4}`;
-
-      dateMonday = `${indicatorDay}${valueDay - 2}`;
-      dateTuesday = `${indicatorDay}${valueDay - 1}`;
-      dateWednesday = `${indicatorDay}${valueDay}`;
-      dateThursday = `${indicatorDay}${valueDay + 1}`;
-      dateFriday = `${indicatorDay}${valueDay + 2}`;
-      dateSaturday = `${indicatorDay}${valueDay + 3}`;
-    } else if (checkDay === "Thursday") {
-      start = `${indicatorDay}${valueDay - 3}`;
-      end = `${indicatorDay}${valueDay + 3}`;
-
-      dateMonday = `${indicatorDay}${valueDay - 3}`;
-      dateTuesday = `${indicatorDay}${valueDay - 2}`;
-      dateWednesday = `${indicatorDay}${valueDay - 1}`;
-      dateThursday = `${indicatorDay}${valueDay}`;
-      dateFriday = `${indicatorDay}${valueDay + 1}`;
-      dateSaturday = `${indicatorDay}${valueDay + 2}`;
-    } else if (checkDay === "Friday") {
-      start = `${indicatorDay}${valueDay - 4}`;
-      end = `${indicatorDay}${valueDay + 2}`;
-
-      dateMonday = `${indicatorDay}${valueDay - 4}`;
-      dateTuesday = `${indicatorDay}${valueDay - 3}`;
-      dateWednesday = `${indicatorDay}${valueDay - 2}`;
-      dateThursday = `${indicatorDay}${valueDay - 1}`;
-      dateFriday = `${indicatorDay}${valueDay}`;
-      dateSaturday = `${indicatorDay}${valueDay + 1}`;
-    } else if (checkDay === "Saturday") {
-      start = `${indicatorDay}${valueDay - 5}`;
-      end = `${indicatorDay}${valueDay + 1}`;
-
-      dateMonday = `${indicatorDay}${valueDay - 5}`;
-      dateTuesday = `${indicatorDay}${valueDay - 4}`;
-      dateWednesday = `${indicatorDay}${valueDay - 3}`;
-      dateThursday = `${indicatorDay}${valueDay - 2}`;
-      dateFriday = `${indicatorDay}${valueDay - 1}`;
-      dateSaturday = `${indicatorDay}${valueDay}`;
-    } else if (checkDay === "Sunday") {
-      start = `${indicatorDay}${valueDay - 6}`;
-      end = `${indicatorDay}${valueDay}`;
-
-      dateMonday = `${indicatorDay}${valueDay - 6}`;
-      dateTuesday = `${indicatorDay}${valueDay - 5}`;
-      dateWednesday = `${indicatorDay}${valueDay - 4}`;
-      dateThursday = `${indicatorDay}${valueDay - 3}`;
-      dateFriday = `${indicatorDay}${valueDay - 2}`;
-      dateSaturday = `${indicatorDay}${valueDay - 1}`;
-    }
     let Monday = 0;
     let Tuesday = 0;
     let Wednesday = 0;
@@ -410,12 +425,12 @@ function salesStatistics(req, res, next) {
           statistics: indicatorData,
           indicator: valueIndicatorData,
           data: [
-            { day: "Monday", value: Monday },
-            { day: "Tuesday", value: Tuesday },
-            { day: "Wednesday", value: Wednesday },
-            { day: "Thursday", value: Thursday },
-            { day: "Friday", value: Friday },
-            { day: "Saturday", value: Saturday },
+            { day: "Monday", date: dateMonday, value: Monday },
+            { day: "Tuesday", date: dateTuesday, value: Tuesday },
+            { day: "Wednesday", date: dateWednesday, value: Wednesday },
+            { day: "Thursday", date: dateThursday, value: Thursday },
+            { day: "Friday", date: dateFriday, value: Friday },
+            { day: "Saturday", date: dateSaturday, value: Saturday },
           ],
         });
       }
