@@ -1,9 +1,6 @@
 const { AbilityBuilder, Ability } = require("@casl/ability");
 
 const policies = {
-  admin(user, { can }) {
-    can("manage", "all");
-  },
   user(user, { can }) {
     can("view", "Product");
     can("create", "Order");
@@ -11,13 +8,14 @@ const policies = {
     can("read", "Cart", { user_id: user._id });
     can("update", "Cart", { user_id: user.id });
   },
+  admin(user, { can }) {
+    can("manage", "all");
+  },
 };
 
-function policyFor(user, admin) {
+function policyFor(user) {
   let builder = new AbilityBuilder();
-  if (user.role === "admin" && typeof policies[user.role] === "function") {
-    policies["admin"](user, builder);
-  } else {
+  if (policies[user.role]) {
     policies[user.role](user, builder);
   }
   return new Ability(builder.rules);
