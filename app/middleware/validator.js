@@ -4,6 +4,7 @@ module.exports = {
   validateCart: [
     check("items.*._id").notEmpty(),
     check("items.*.qty").notEmpty(),
+    check("items.*.categoryName").notEmpty(),
     check("items.*.idVariantOption").notEmpty(),
     check("items.*.variantName").notEmpty(),
     check("items.*.variantOption").notEmpty(),
