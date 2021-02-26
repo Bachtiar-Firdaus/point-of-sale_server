@@ -4,41 +4,7 @@ const User = require("../user/model");
 const Product = require("../product/model");
 const moment = require("moment");
 const { check } = require("express-validator");
-function todaysIncome(req, res, next) {
-  try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: "Anda Belum Login atau Token Expired",
-      });
-    }
-    let policy = policyFor(req.user);
-    if (!policy.can("manage", "all")) {
-      return res.json({
-        error: 1,
-        message: "Anda Tidak Memiliki Akses Untuk Melihat todaysIncome",
-      });
-    }
-    let { date = "" } = req.query;
-    let valueDate = "";
-    valueDate = date;
-    if (!date.length) {
-      valueDate = moment().format("YYYY-MM-DD");
-    }
-    let todaysIncome = 0;
-    History.find({ date: valueDate }).then((check_date) => {
-      check_date.map((dataAmount) => {
-        todaysIncome = todaysIncome + dataAmount.amount;
-      });
-      return res.json({
-        message: "succes",
-        data: { date: valueDate, sigmaTodaysIncome: todaysIncome },
-      });
-    });
-  } catch (error) {
-    next(error);
-  }
-}
+
 function cekingDay(checkDay) {
   let startValue;
   let endValue;
@@ -130,156 +96,6 @@ function cekingDay(checkDay) {
     dateFridayValue,
     dateSaturdayValue,
   };
-}
-function weeklyIncome(req, res, next) {
-  try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: "Anda Belum Login atau Token Expired",
-      });
-    }
-    let policy = policyFor(req.user);
-    if (!policy.can("manage", "all")) {
-      return res.json({
-        error: 1,
-        message: "Anda Tidak Memiliki Akses Untuk Melihat weeklyIncome",
-      });
-    }
-    let { date = "" } = req.query;
-    let valueDate = "";
-    valueDate = date;
-    if (!date.length) {
-      valueDate = moment().format("YYYY-MM-DD");
-    }
-    let checkDay = moment(valueDate).format("dddd");
-    let valueDay = cekingDay(checkDay);
-
-    let start = moment(valueDate)
-      .subtract(`${valueDay.startValue}`, "days")
-      .format("YYYY-MM-DD");
-    let end = moment(valueDate)
-      .add(`${valueDay.endValue}`, "days")
-      .format("YYYY-MM-DD");
-    let weeklyIncome = 0;
-    History.find({ date: { $gte: `${start}`, $lt: `${end}` } }).then(
-      (check_date) => {
-        check_date.map((dataAmount) => {
-          weeklyIncome = weeklyIncome + dataAmount.amount;
-        });
-        return res.json({
-          message: "succes",
-          data: {
-            Start_Date: start,
-            End_Date: end,
-            sigmaWeeklyIncome: weeklyIncome,
-          },
-        });
-      }
-    );
-  } catch (error) {
-    next(error);
-  }
-}
-function monthlyIncome(req, res, next) {
-  try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: "Anda Belum Login atau Token Expired",
-      });
-    }
-    let policy = policyFor(req.user);
-    if (!policy.can("manage", "all")) {
-      return res.json({
-        error: 1,
-        message: "Anda Tidak Memiliki Akses Untuk Melihat monthlyIncome",
-      });
-    }
-    let { date = "" } = req.query;
-    let valueDate = "";
-    valueDate = date;
-    if (!date.length) {
-      valueDate = moment().format("YYYY-MM-DD");
-    }
-    let data = valueDate.toString();
-    valueDate = data.substr(4, 4);
-    let valueResMoon = data.substr(5, 2);
-    let monthlyIncome = 0;
-    History.find({ date: { $regex: `${valueDate}` } }).then((check_date) => {
-      check_date.map((dataAmount) => {
-        monthlyIncome = monthlyIncome + dataAmount.amount;
-      });
-      return res.json({
-        message: "succes",
-        data: { Moon: valueResMoon, sigmaMonthlyIncome: monthlyIncome },
-      });
-    });
-  } catch (error) {
-    next(error);
-  }
-}
-async function userActive(req, res, next) {
-  try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: "Anda Belum Login atau Token Expired",
-      });
-    }
-    let policy = policyFor(req.user);
-    if (!policy.can("manage", "all")) {
-      return res.json({
-        error: 1,
-        message: "Anda Tidak Memiliki Akses Untuk Melihat userActive",
-      });
-    }
-    let bucketUser = [];
-    let userActive = await User.find();
-    userActive.map((value_user) => {
-      if (value_user.token.length !== 0) {
-        userActive = value_user.full_name;
-      }
-      bucketUser.push({ name: `${userActive}`, status: "Active" });
-    });
-    return res.json({
-      message: "succes",
-      data: bucketUser,
-    });
-  } catch (error) {
-    next(error);
-  }
-}
-async function bestSeller(req, res, next) {
-  try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: "Anda Belum Login atau Token Expired",
-      });
-    }
-    let policy = policyFor(req.user);
-    if (!policy.can("manage", "all")) {
-      return res.json({
-        error: 1,
-        message: "Anda Tidak Memiliki Akses Untuk Melihat BestSeller",
-      });
-    }
-    let product = await Product.find()
-      .sort({ goods_sold: "-1" })
-      .limit(3)
-      .populate("category")
-      .populate("variant")
-      .populate("discount");
-
-    // console.log(product);
-    return res.json({
-      message: "succes",
-      data: product,
-    });
-  } catch (error) {
-    next(error);
-  }
 }
 function salesStatistics(req, res, next) {
   try {
@@ -438,11 +254,116 @@ function salesStatistics(req, res, next) {
     next(error);
   }
 }
+
+async function dashboard(req, res, next) {
+  try {
+    if (!req.user) {
+      return res.json({
+        error: 1,
+        message: "Anda Belum Login atau Token Expired",
+      });
+    }
+    let policy = policyFor(req.user);
+    if (!policy.can("manage", "all")) {
+      return res.json({
+        error: 1,
+        message: "Anda Tidak Memiliki Akses Untuk Melihat Dashboard",
+      });
+    }
+    let { date = "" } = req.query;
+    let valueDate = "";
+    valueDate = date;
+    if (!date.length) {
+      valueDate = moment().format("YYYY-MM-DD");
+    }
+
+    let checkDay = moment(valueDate).format("dddd");
+    let valueDay = cekingDay(checkDay);
+
+    let valueResMoon = moment(valueDate).format("MMMM");
+    let data = valueDate.toString();
+    let indicatorValueDate = data.substr(4, 4);
+
+    let start = moment(valueDate)
+      .subtract(`${valueDay.startValue}`, "days")
+      .format("YYYY-MM-DD");
+    let end = moment(valueDate)
+      .add(`${valueDay.endValue}`, "days")
+      .format("YYYY-MM-DD");
+
+    //logic Todays Income
+    let valueTodaysIncome = 0;
+    let todaysIncome = await History.find({ date: valueDate });
+    todaysIncome.map((dataTodaysIncome) => {
+      valueTodaysIncome = valueTodaysIncome + dataTodaysIncome.amount;
+    });
+
+    //logic weekly Income
+    let valueWeeklyIncome = 0;
+    let weeklyIncome = await History.find({
+      date: { $gte: `${start}`, $lt: `${end}` },
+    });
+    weeklyIncome.map((dataWeeklyIncome) => {
+      valueWeeklyIncome = valueWeeklyIncome + dataWeeklyIncome.amount;
+    });
+
+    //logic monthly Income
+    let valueMonthlyIncome = 0;
+    let monthlyIncome = await History.find({
+      date: { $regex: `${indicatorValueDate}` },
+    });
+    monthlyIncome.map((dataMonthlyIncome) => {
+      valueMonthlyIncome = valueMonthlyIncome + dataMonthlyIncome.amount;
+    });
+
+    //logic user Active
+    let bucketUser = [];
+    let userActive = await User.find();
+    userActive.map((value_user) => {
+      if (value_user.token.length !== 0) {
+        userActive = value_user.full_name;
+      }
+      bucketUser.push({ name: `${userActive}`, status: "Active" });
+    });
+
+    //logic best seller
+    let product = await Product.find()
+      .sort({ goods_sold: "-1" })
+      .limit(3)
+      .populate("category")
+      .populate("variant")
+      .populate("discount");
+
+    let productFilter = product.filter((product) => product.goods_sold > 0);
+
+    return res.json({
+      message: "succes",
+      data: [
+        {
+          name: "Todays Income",
+          date: valueDate,
+          sigmaTodaysIncome: valueTodaysIncome,
+        },
+        {
+          name: "Weekly Income",
+          Start_Date: start,
+          End_Date: end,
+          sigmaWeeklyIncome: valueWeeklyIncome,
+        },
+        {
+          name: "Moontly Income",
+          Moon: valueResMoon,
+          sigmaMonthlyIncome: valueMonthlyIncome,
+        },
+        { name: "User Active", data: bucketUser },
+        { name: "Best Seller", data: productFilter },
+      ],
+    });
+  } catch (error) {
+    next(error);
+  }
+}
 module.exports = {
-  todaysIncome,
-  monthlyIncome,
-  weeklyIncome,
-  userActive,
-  bestSeller,
   salesStatistics,
+  dashboard,
 };
