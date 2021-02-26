@@ -280,7 +280,6 @@ async function dashboard(req, res, next) {
     let checkDay = moment(valueDate).format("dddd");
     let valueDay = cekingDay(checkDay);
 
-    let valueResMoon = moment(valueDate).format("MMMM");
     let data = valueDate.toString();
     let indicatorValueDate = data.substr(4, 4);
 
@@ -338,26 +337,13 @@ async function dashboard(req, res, next) {
 
     return res.json({
       message: "succes",
-      data: [
-        {
-          name: "Todays Income",
-          date: valueDate,
-          sigmaTodaysIncome: valueTodaysIncome,
-        },
-        {
-          name: "Weekly Income",
-          Start_Date: start,
-          End_Date: end,
-          sigmaWeeklyIncome: valueWeeklyIncome,
-        },
-        {
-          name: "Moontly Income",
-          Moon: valueResMoon,
-          sigmaMonthlyIncome: valueMonthlyIncome,
-        },
-        { name: "User Active", data: bucketUser },
-        { name: "Best Seller", data: productFilter },
-      ],
+      data_sigma: {
+        sigmaTodaysIncome: valueTodaysIncome,
+        sigmaWeeklyIncome: valueWeeklyIncome,
+        sigmaMonthlyIncome: valueMonthlyIncome,
+      },
+      data_user: bucketUser,
+      data_best_seller: productFilter,
     });
   } catch (error) {
     next(error);
