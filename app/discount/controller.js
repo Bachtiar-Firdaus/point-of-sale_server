@@ -4,12 +4,6 @@ const Discount = require("./model");
 
 async function index(req, res, next) {
   try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: "Anda Belum Login Atau Token Expired",
-      });
-    }
     let { limit = 10, skip = 0, q = "" } = req.query;
     let criteria = {};
 
@@ -29,12 +23,6 @@ async function index(req, res, next) {
 
 async function singgleDiscount(req, res, json) {
   try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: "Anda Belum Login Atau Token Expired",
-      });
-    }
     let findDiscount = await Discount.findOne({ _id: req.params.id });
     return res.json({ message: "succes", data: findDiscount });
   } catch (error) {
@@ -44,12 +32,6 @@ async function singgleDiscount(req, res, json) {
 
 async function createDiscount(req, res, next) {
   try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: "Anda Belum Login Atau Token Expired",
-      });
-    }
     let policy = policyFor(req.user);
     if (!policy.can("manage", "all")) {
       return res.json({
@@ -76,12 +58,6 @@ async function createDiscount(req, res, next) {
 
 async function addProductToDiscount(req, res, next) {
   try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: "Anda Belum Login Atau Token Expired",
-      });
-    }
     let policy = policyFor(req.user);
     if (!policy.can("manage", "all")) {
       return res.json({
@@ -163,13 +139,6 @@ async function addProductToDiscount(req, res, next) {
 
 async function updateDiscount(req, res, next) {
   try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: "Anda Belum Login Atau Token Expired",
-      });
-    }
-
     let policy = policyFor(req.user);
     if (!policy.can("manage", "all")) {
       return res.json({
@@ -203,12 +172,6 @@ async function updateDiscount(req, res, next) {
 
 async function destroyDiscount(req, res, next) {
   try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: "Anda Belum Login atau Token Expired",
-      });
-    }
     let policy = policyFor(req.user);
     if (!policy.can("manage", "all")) {
       return res.json({
