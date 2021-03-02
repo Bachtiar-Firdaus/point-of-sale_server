@@ -1,9 +1,13 @@
 const router = require("express").Router();
-const multer = require("multer");
+const { securityCek } = require("../middleware/security");
 const dashboardController = require("./controller");
 
-router.get("/dashboard", dashboardController.dashboard);
+router.get("/dashboard", securityCek, dashboardController.dashboard);
 
-router.get("/dashboard/sales-statistics", dashboardController.salesStatistics);
+router.get(
+  "/dashboard/sales-statistics",
+  securityCek,
+  dashboardController.salesStatistics
+);
 
 module.exports = router;
