@@ -3,12 +3,6 @@ const { policyFor } = require("../policy");
 
 async function index(req, res, next) {
   try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: "Anda Belum Login atau Token Expired",
-      });
-    }
     let policy = policyFor(req.user);
     if (!policy.can("manage", "all")) {
       return res.json({
@@ -36,12 +30,6 @@ async function index(req, res, next) {
 
 async function singleVariant(req, res, next) {
   try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: "Anda Belum Login Atau Token Expired",
-      });
-    }
     let policy = policyFor(req.user);
     if (!policy.can("manage", "all")) {
       return res.json({
@@ -60,12 +48,6 @@ async function singleVariant(req, res, next) {
 
 async function variant(req, res, next) {
   try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: "Anda Belum Login atau Token Expired",
-      });
-    }
     let policy = policyFor(req.user);
     if (!policy.can("manage", "all")) {
       return res.json({
@@ -92,12 +74,6 @@ async function variant(req, res, next) {
 
 async function update(req, res, next) {
   try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: "Anda Belum Login Atau Token Expired",
-      });
-    }
     let policy = policyFor(req.user);
     if (!policy.can("manage", "all")) {
       return res.json({
@@ -126,13 +102,6 @@ async function update(req, res, next) {
 
 async function destroy(req, res, next) {
   try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: "Anda Belum Login Atau Token Expired",
-      });
-    }
-
     let policy = policyFor(req.user);
     if (!policy.can("manage", "all")) {
       return res.json({
