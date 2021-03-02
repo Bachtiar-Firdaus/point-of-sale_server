@@ -3,12 +3,6 @@ const { policyFor } = require("../policy");
 
 async function index(req, res, next) {
   try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: "Anda Belum Login Atau Token Expired",
-      });
-    }
     let { limit = 10, skip = 0, q = "" } = req.query;
     let criteria = {};
     if (q.length) {
@@ -27,12 +21,6 @@ async function index(req, res, next) {
 
 async function singgleCategory(req, res, next) {
   try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: "Anda Belum Login Atau Token Expired",
-      });
-    }
     let id = req.params.id;
     let category = await Category.findOne({ _id: id });
     return res.json({ message: "succes", data: category });
@@ -43,12 +31,6 @@ async function singgleCategory(req, res, next) {
 
 async function category(req, res, next) {
   try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: "Anda Belum Login atau Token Expired",
-      });
-    }
     let policy = policyFor(req.user);
     if (!policy.can("manage", "all")) {
       return res.json({
@@ -74,12 +56,6 @@ async function category(req, res, next) {
 
 async function update(req, res, next) {
   try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: "Anda Belum Login atau Token Expired",
-      });
-    }
     let policy = policyFor(req.user);
     if (!policy.can("manage", "all")) {
       return res.json({
@@ -108,13 +84,6 @@ async function update(req, res, next) {
 
 async function destroy(req, res, next) {
   try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: "Anda Belum Login Atau Token Expired",
-      });
-    }
-
     let policy = policyFor(req.user);
     if (!policy.can("manage", "all")) {
       return res.json({
