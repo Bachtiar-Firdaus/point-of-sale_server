@@ -7,12 +7,6 @@ const nodemailer = require("nodemailer");
 
 async function index(req, res, next) {
   try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: "Anda Belum Login Atau Token Expired",
-      });
-    }
     let policy = policyFor(req.user);
     if (!policy.can("manage", "all")) {
       return res.json({
@@ -47,13 +41,6 @@ async function index(req, res, next) {
 
 async function creatOrder(req, res, next) {
   try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: "Anda Belum Login Atau Token Expired",
-      });
-    }
-
     let policy = policyFor(req.user);
     if (!policy.can("create", "Order")) {
       return res.json({
