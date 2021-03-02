@@ -11,26 +11,14 @@ const { getToken } = require("../utilts/get-token");
 const { policyFor } = require("../policy");
 
 const HASH_ROUND = 10;
-function me(req, res, next) {
-  if (!req.user) {
-    return res.json({
-      error: 1,
-      message: `Your're not login or token expired`,
-    });
-  }
 
+function me(req, res, next) {
   return res.json({ message: "succes", data: req.user });
 }
 
 //pembatasan hanya untuk admin
 async function index(req, res, next) {
   try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: `Kamu Belum Login atau token tidak berlaku lagi`,
-      });
-    }
     let policy = policyFor(req.user);
     if (!policy.can("manage", "all")) {
       return res.json({
@@ -56,12 +44,6 @@ async function index(req, res, next) {
 //pembatasan hanya untuk admin
 async function singgleUser(req, res, next) {
   try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: `Kamu Belum Login atau token tidak berlaku lagi`,
-      });
-    }
     let policy = policyFor(req.user);
     if (!policy.can("manage", "all")) {
       return res.json({
@@ -80,12 +62,6 @@ async function singgleUser(req, res, next) {
 //pembatasan hanya untuk admin
 async function register(req, res, next) {
   try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: `Kamu Belum Login atau token tidak berlaku lagi`,
-      });
-    }
     let policy = policyFor(req.user);
     if (!policy.can("manage", "all")) {
       return res.json({
@@ -116,12 +92,6 @@ async function register(req, res, next) {
 
 async function update(req, res, next) {
   try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: "Anda Belum Login atau Token Expired",
-      });
-    }
     let policy = policyFor(req.user);
     if (!policy.can("manage", "all")) {
       return res.json({
@@ -162,12 +132,6 @@ async function update(req, res, next) {
 //pembatasan hanya untuk admin
 async function destroy(req, res, next) {
   try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: `Kamu Belum Login atau token tidak berlaku lagi`,
-      });
-    }
     let policy = policyFor(req.user);
     console.log(req.user);
     if (!policy.can("manage", "all")) {
