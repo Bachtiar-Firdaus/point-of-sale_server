@@ -1,15 +1,8 @@
-const { policyFor } = require("../policy");
 const Product = require("../product/model");
 const Cart = require("./model");
 
 async function index(req, res, next) {
   try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: "Anda Belum Login Atau Token Expired",
-      });
-    }
     let cart = await Cart.find({ user: req.user }).populate("product");
     return res.json({ message: "succes", data: cart });
   } catch (error) {
@@ -19,12 +12,6 @@ async function index(req, res, next) {
 
 async function cart(req, res, next) {
   try {
-    if (!req.user) {
-      return res.json({
-        error: 1,
-        message: "Anda Belum Login atau Token Expired",
-      });
-    }
     let { items } = req.body;
     const productId = items.map((itm) => itm._id);
     const products = await Product.find({ _id: { $in: productId } })
