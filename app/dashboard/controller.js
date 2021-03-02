@@ -3,7 +3,6 @@ const History = require("../order/model");
 const User = require("../user/model");
 const Product = require("../product/model");
 const moment = require("moment");
-const { check } = require("express-validator");
 
 function cekingDay(checkDay) {
   let startValue;
