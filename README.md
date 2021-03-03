@@ -29,7 +29,7 @@ Pembuatan Server-Side Point of Sale menggunakan despendencies :
 - "passport-local": "^1.0.0",
 - "path": "^0.12.7"
 
-# **Documentasi Api Point of Sale**
+# **Documentasi Api POSTMAN Point of Sale**
 Untuk api sudah di production menggunakan heroku
 untuk membuka dokumentasi postmant bisa ikuti link ini [POSTMAN](https://documenter.getpostman.com/view/13931981/TW6wJU5V)
 # **Documentasi Api Point of Sale**
