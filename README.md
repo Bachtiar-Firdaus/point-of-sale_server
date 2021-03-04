@@ -33,11 +33,13 @@ Pembuatan Server-Side Point of Sale menggunakan despendencies :
 Untuk api sudah di production menggunakan heroku
 untuk membuka dokumentasi postmant bisa ikuti link ini [POSTMAN](https://documenter.getpostman.com/view/13931981/TW6wJU5V)
 # **Documentasi Api Point of Sale**
-![image](https://user-images.githubusercontent.com/33290851/109778881-ed3a5280-7c37-11eb-9f10-37aef19a931b.png)![image](https://user-images.githubusercontent.com/33290851/109778948-04794000-7c38-11eb-9177-361e29373b31.png)![image](https://user-images.githubusercontent.com/33290851/109779041-1e1a8780-7c38-11eb-8178-e1f960ce6b5c.png)
+![image](https://user-images.githubusercontent.com/33290851/109778881-ed3a5280-7c37-11eb-9f10-37aef19a931b.png)![image](https://user-images.githubusercontent.com/33290851/109778948-04794000-7c38-11eb-9177-361e29373b31.png)![image](https://user-images.githubusercontent.com/33290851/109911966-b3238c00-7cdd-11eb-80d6-950e42b24087.png)
+
 # **Unified Modeling Language**
 
 - **Usecase Diagram Point of Sale**
-  ![image](https://user-images.githubusercontent.com/33290851/109698208-bfb2c200-7bc1-11eb-8baf-cd9faabc1725.png)
+![image](https://user-images.githubusercontent.com/33290851/109911376-8fac1180-7cdc-11eb-98fa-6677e88d2e67.png)
+
 
 - **Diagram Activity Point of Sale**
 
