@@ -6,7 +6,7 @@ const Cart = require("../cart/model");
 const AutoIncrement = require("mongoose-sequence")(mongoose);
 
 const orderSchema = Schema({
-  nama_lengkap: {
+  fullName: {
     type: String,
   },
   email: {
@@ -22,31 +22,31 @@ const orderSchema = Schema({
 
   orders: [
     {
-      Product: {
+      product: {
         type: String,
       },
-      Category_Name: {
+      categoryName: {
         type: String,
       },
-      Variant_Name: {
+      variantName: {
         type: String,
       },
-      VariantOption: {
+      variantOption: {
         type: String,
       },
-      Qty: {
+      qty: {
         type: Number,
       },
-      Discount: {
+      discount: {
         type: String,
       },
-      Price: {
+      price: {
         type: Number,
       },
-      Total_Discount: {
+      totalDiscount: {
         type: Number,
       },
-      Sub_Total_Belanja: {
+      subTotalBelanja: {
         type: Number,
       },
     },
@@ -56,7 +56,7 @@ const orderSchema = Schema({
   },
 });
 
-orderSchema.plugin(AutoIncrement, { inc_field: "order_number" });
+orderSchema.plugin(AutoIncrement, { inc_field: "orderNumber" });
 
 orderSchema.post("save", async function () {
   let idUser = this.user;
@@ -65,13 +65,11 @@ orderSchema.post("save", async function () {
       Product.findOne({ _id: data.product }).then(async (res) => {
         Variant.findOne({ _id: res.variant }).then(async (variant) => {
           variant.option.forEach(async (option) => {
-            res.goods_sold = res.goods_sold + data.qty;
             if (data.variant.option === option.name) {
               option.stock = option.stock - data.qty;
             }
           });
           await variant.save();
-          await res.save();
         });
       });
     });

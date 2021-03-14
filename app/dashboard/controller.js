@@ -13,76 +13,84 @@ function cekingDay(checkDay) {
   let dateThursdayValue;
   let dateFridayValue;
   let dateSaturdayValue;
+  let dateSundayValue;
   switch (checkDay) {
     case "Monday":
       startValue = 0;
-      endValue = 6;
+      endValue = 7;
       dateMondayValue = 0;
       dateTuesdayValue = 1;
       dateWednesdayValue = 2;
       dateThursdayValue = 3;
       dateFridayValue = 4;
       dateSaturdayValue = 5;
+      dateSundayValue = 6;
       break;
     case "Tuesday":
       startValue = 1;
-      endValue = 5;
+      endValue = 6;
       dateMondayValue = -1;
       dateTuesdayValue = 0;
       dateWednesdayValue = 1;
       dateThursdayValue = 2;
       dateFridayValue = 3;
       dateSaturdayValue = 4;
+      dateSundayValue = 5;
       break;
     case "Wednesday":
       startValue = 2;
-      endValue = 4;
+      endValue = 5;
       dateMondayValue = -2;
       dateTuesdayValue = -1;
       dateWednesdayValue = 0;
       dateThursdayValue = 1;
       dateFridayValue = 2;
       dateSaturdayValue = 3;
+      dateSundayValue = 4;
       break;
     case "Thursday":
       startValue = 3;
-      endValue = 3;
+      endValue = 4;
       dateMondayValue = -3;
       dateTuesdayValue = -2;
       dateWednesdayValue = -1;
       dateThursdayValue = 0;
       dateFridayValue = 1;
       dateSaturdayValue = 2;
+      dateSundayValue = 3;
       break;
     case "Friday":
       startValue = 4;
-      endValue = 2;
+      endValue = 3;
       dateMondayValue = -4;
       dateTuesdayValue = -3;
       dateWednesdayValue = -2;
       dateThursdayValue = -1;
       dateFridayValue = 0;
       dateSaturdayValue = 1;
+      dateSundayValue = 2;
       break;
     case "Saturday":
       startValue = 5;
-      endValue = 1;
+      endValue = 2;
       dateMondayValue = -5;
       dateTuesdayValue = -4;
       dateWednesdayValue = -3;
       dateThursdayValue = -2;
       dateFridayValue = -1;
       dateSaturdayValue = 0;
+      dateSundayValue = 1;
       break;
     case "Sunday":
       startValue = 6;
-      endValue = 0;
+      endValue = 1;
       dateMondayValue = -6;
       dateTuesdayValue = -5;
       dateWednesdayValue = -4;
       dateThursdayValue = -3;
       dateFridayValue = -2;
       dateSaturdayValue = -1;
+      dateSundayValue = 0;
       break;
   }
   return {
@@ -94,6 +102,7 @@ function cekingDay(checkDay) {
     dateThursdayValue,
     dateFridayValue,
     dateSaturdayValue,
+    dateSundayValue,
   };
 }
 function salesStatistics(req, res, next) {
@@ -140,107 +149,128 @@ function salesStatistics(req, res, next) {
     let dateSaturday = moment(valueDate)
       .add(`${valueDay.dateSaturdayValue}`, "days")
       .format("YYYY-MM-DD");
+    let dateSunday = moment(valueDate)
+      .add(`${valueDay.dateSundayValue}`, "days")
+      .format("YYYY-MM-DD");
 
-    let Monday = 0;
-    let Tuesday = 0;
-    let Wednesday = 0;
-    let Thursday = 0;
-    let Friday = 0;
-    let Saturday = 0;
+    let monday = 0;
+    let tuesday = 0;
+    let wednesday = 0;
+    let thursday = 0;
+    let friday = 0;
+    let saturday = 0;
+    let sunday = 0;
     let indicatorData = "";
     let valueIndicatorData = "";
 
-    let bultStatistics = [];
+    let builtStatistics = [];
     History.find({ date: { $gte: `${start}`, $lt: `${end}` } }).then(
-      (check_date) => {
-        check_date.map((dataStatistics) => {
+      (checkDate) => {
+        checkDate.map((dataStatistics) => {
           dataStatistics.orders.map((built) => {
-            bultStatistics.push({
+            builtStatistics.push({
               date: dataStatistics.date,
-              product: built.Product,
-              category: built.Category_Name,
-              sigma: built.Sub_Total_Belanja,
+              product: built.product,
+              category: built.categoryName,
+              sigma: built.subTotalBelanja,
             });
           });
         });
-        bultStatistics.map((rebuilt) => {
+        builtStatistics.map((rebuilt) => {
           if (product.length) {
             indicatorData = "product";
             valueIndicatorData = product;
             if (rebuilt.date === dateMonday && rebuilt.product === product) {
-              Monday = Monday + rebuilt.sigma;
+              monday = monday + rebuilt.sigma;
             } else if (
               rebuilt.date === dateTuesday &&
               rebuilt.product === product
             ) {
-              Tuesday = Tuesday + rebuilt.sigma;
+              tuesday = tuesday + rebuilt.sigma;
             } else if (
               rebuilt.date === dateWednesday &&
               rebuilt.product === product
             ) {
-              Wednesday = Wednesday + rebuilt.sigma;
+              wednesday = wednesday + rebuilt.sigma;
             } else if (
               rebuilt.date === dateThursday &&
               rebuilt.product === product
             ) {
-              Thursday = Thursday + rebuilt.sigma;
+              thursday = thursday + rebuilt.sigma;
             } else if (
               rebuilt.date === dateFriday &&
               rebuilt.product === product
             ) {
-              Friday = Friday + rebuilt.sigma;
+              friday = friday + rebuilt.sigma;
             } else if (
               rebuilt.date === dateSaturday &&
               rebuilt.product === product
             ) {
-              Saturday = Saturday + rebuilt.sigma;
+              saturday = saturday + rebuilt.sigma;
+            } else if (
+              rebuilt.date === dateSunday &&
+              rebuilt.product === product
+            ) {
+              sunday = sunday + rebuilt.sigma;
             }
           } else if (category.length) {
             indicatorData = "category";
             valueIndicatorData = category;
             if (rebuilt.date === dateMonday && rebuilt.category === category) {
-              Monday = Monday + rebuilt.sigma;
+              monday = monday + rebuilt.sigma;
             } else if (
               rebuilt.date === dateTuesday &&
               rebuilt.category === category
             ) {
-              Tuesday = Tuesday + rebuilt.sigma;
+              tuesday = tuesday + rebuilt.sigma;
             } else if (
               rebuilt.date === dateWednesday &&
               rebuilt.category === category
             ) {
-              Wednesday = Wednesday + rebuilt.sigma;
+              wednesday = wednesday + rebuilt.sigma;
             } else if (
               rebuilt.date === dateThursday &&
               rebuilt.category === category
             ) {
-              Thursday = Thursday + rebuilt.sigma;
+              thursday = thursday + rebuilt.sigma;
             } else if (
               rebuilt.date === dateFriday &&
               rebuilt.category === category
             ) {
-              Friday = Friday + rebuilt.sigma;
+              friday = friday + rebuilt.sigma;
             } else if (
               rebuilt.date === dateSaturday &&
               rebuilt.category === category
             ) {
-              Saturday = Saturday + rebuilt.sigma;
+              saturday = saturday + rebuilt.sigma;
+            } else if (
+              rebuilt.date === dateSunday &&
+              rebuilt.category === category
+            ) {
+              sunday = sunday + rebuilt.sigma;
             }
           }
         });
-        return res.json({
-          message: "succes",
-          statistics: indicatorData,
-          indicator: valueIndicatorData,
-          data: [
-            { day: "Monday", date: dateMonday, value: Monday },
-            { day: "Tuesday", date: dateTuesday, value: Tuesday },
-            { day: "Wednesday", date: dateWednesday, value: Wednesday },
-            { day: "Thursday", date: dateThursday, value: Thursday },
-            { day: "Friday", date: dateFriday, value: Friday },
-            { day: "Saturday", date: dateSaturday, value: Saturday },
-          ],
-        });
+        if (indicatorData !== "" && valueIndicatorData !== "") {
+          return res.json({
+            message: "succes",
+            statistics: indicatorData,
+            indicator: valueIndicatorData,
+            data: [
+              { day: "Monday", date: dateMonday, value: monday },
+              { day: "Tuesday", date: dateTuesday, value: tuesday },
+              { day: "Wednesday", date: dateWednesday, value: wednesday },
+              { day: "Thursday", date: dateThursday, value: thursday },
+              { day: "Friday", date: dateFriday, value: friday },
+              { day: "Saturday", date: dateSaturday, value: saturday },
+              { day: "Sunday", date: dateSunday, value: sunday },
+            ],
+          });
+        } else {
+          return res.json({
+            message: "data kosong",
+          });
+        }
       }
     );
   } catch (error) {
@@ -275,7 +305,7 @@ async function dashboard(req, res, next) {
     let end = moment(valueDate)
       .add(`${valueDay.endValue}`, "days")
       .format("YYYY-MM-DD");
-
+    console.log(start, end);
     //logic Todays Income
     let valueTodaysIncome = 0;
     let todaysIncome = await History.find({ date: valueDate });
@@ -304,32 +334,32 @@ async function dashboard(req, res, next) {
     //logic user Active
     let bucketUser = [];
     let userActive = await User.find();
-    userActive.map((value_user) => {
-      if (value_user.token.length !== 0) {
-        userActive = value_user.full_name;
+    userActive.map((valueUser) => {
+      if (valueUser.token.length !== 0) {
+        userActive = valueUser.fullName;
       }
       bucketUser.push({ name: `${userActive}`, status: "Active" });
     });
 
     //logic best seller
     let product = await Product.find()
-      .sort({ goods_sold: "-1" })
+      .sort({ goodsSold: "-1" })
       .limit(3)
       .populate("category")
       .populate("variant")
       .populate("discount");
 
-    let productFilter = product.filter((product) => product.goods_sold > 0);
+    let productFilter = product.filter((product) => product.goodsSold > 0);
 
     return res.json({
       message: "succes",
-      data_sigma: {
+      dataSigma: {
         sigmaTodaysIncome: valueTodaysIncome,
         sigmaWeeklyIncome: valueWeeklyIncome,
         sigmaMonthlyIncome: valueMonthlyIncome,
       },
-      data_user: bucketUser,
-      data_best_seller: productFilter,
+      dataUser: bucketUser,
+      dataBestSeller: productFilter,
     });
   } catch (error) {
     next(error);

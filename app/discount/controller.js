@@ -67,19 +67,18 @@ async function addProductToDiscount(req, res, next) {
       });
     }
     let payload = req.body;
-    console.log(payload);
     //hapus product yang sama didalam discount
-    Discount.find({}).then(async (check_discounts) => {
+    Discount.find({}).then(async (checkDiscounts) => {
       payload.product.forEach((dataPayload) => {
-        check_discounts.forEach((check_discount) => {
-          check_discount.product.forEach(async (dataCollcetion) => {
+        checkDiscounts.forEach((checkDiscount) => {
+          checkDiscount.product.forEach(async (dataCollcetion) => {
             if (
               JSON.stringify(dataPayload) === JSON.stringify(dataCollcetion)
             ) {
-              check_discount.product.pull(dataCollcetion);
+              checkDiscount.product.pull(dataCollcetion);
               await Discount.findOneAndUpdate(
-                { _id: check_discount._id },
-                { product: check_discount.product },
+                { _id: checkDiscount._id },
+                { product: checkDiscount.product },
                 {
                   new: true,
                   runValidators: true,

@@ -4,7 +4,7 @@ module.exports = {
       if (!req.user) {
         return res.json({
           error: 1,
-          message: `Your're not login or token expired`,
+          message: `Anda Belum Login Atau Token Expired`,
         });
       }
       next();

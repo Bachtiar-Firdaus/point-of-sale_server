@@ -10,7 +10,7 @@ const cartSchema = Schema(
       required: [true, "Nama produk harus diisi"],
     },
 
-    image_url: String,
+    imageUrl: String,
 
     price: {
       type: Number,
@@ -50,12 +50,10 @@ const cartSchema = Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    product: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Product",
-      },
-    ],
+    product: {
+      type: Schema.Types.ObjectId,
+      ref: "Product",
+    },
   },
   { timestamps: true }
 );

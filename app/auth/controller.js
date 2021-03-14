@@ -5,7 +5,7 @@ const User = require("../user/model");
 const config = require("../config");
 const { getToken } = require("../utilts/get-token");
 const { policyFor } = require("../policy");
-const HASH_ROUND = 10;
+const hashRound = 10;
 
 function me(req, res, next) {
   return res.json({ message: "succes", data: req.user });
@@ -24,7 +24,7 @@ async function index(req, res, next) {
     let { limit = 10, skip = 0, q = "" } = req.query;
     let criteria = {};
     if (q.length) {
-      criteria = { ...criteria, full_name: { $regex: `${q}`, $options: "i" } };
+      criteria = { ...criteria, fullName: { $regex: `${q}`, $options: "i" } };
     }
     let user = await User.find(criteria)
       .limit(parseInt(limit))
@@ -101,7 +101,7 @@ async function update(req, res, next) {
         message: "Password Wajib Di Isi",
       });
     }
-    let password = bcrypt.hashSync(payload.password, HASH_ROUND);
+    let password = bcrypt.hashSync(payload.password, hashRound);
     let finalPayload = { ...payload, password };
     let user = await User.findOneAndUpdate(
       { _id: req.params.id },

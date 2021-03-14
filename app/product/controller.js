@@ -10,12 +10,12 @@ const { policyFor } = require("../policy");
 async function bestSeller(req, res, next) {
   try {
     let product = await Product.find()
-      .sort({ goods_sold: "-1" })
+      .sort({ goodsSold: "-1" })
       .populate("category")
       .populate("variant")
       .populate("discount");
 
-    let productFilter = product.filter((product) => product.goods_sold > 0);
+    let productFilter = product.filter((product) => product.goodsSold > 0);
     return res.json({
       message: "succes",
       data: productFilter,
@@ -39,22 +39,22 @@ async function store(req, res, next) {
     let payload = req.body;
 
     if (req.file) {
-      let tmp_path = req.file.path;
+      let tmpPath = req.file.path;
       let originalExt = req.file.originalname.split(".")[
         req.file.originalname.split(".").length - 1
       ];
-      let filename = req.file.filename + "." + originalExt;
-      let target_path = path.resolve(
+      let fileName = req.file.filename + "." + originalExt;
+      let targetPath = path.resolve(
         config.rootPath,
-        `public/upload/${filename}`
+        `public/upload/${fileName}`
       );
 
-      const src = fs.createReadStream(tmp_path);
-      const dest = fs.createWriteStream(target_path);
+      const src = fs.createReadStream(tmpPath);
+      const dest = fs.createWriteStream(targetPath);
       src.pipe(dest);
 
       src.on("end", async () => {
-        let product = new Product({ ...payload, image_url: filename });
+        let product = new Product({ ...payload, imageUrl: fileName });
         await product.save();
         return res.json({ message: "succes", data: product });
       });
@@ -149,29 +149,29 @@ async function update(req, res, next) {
 
     let payload = req.body;
     if (req.file) {
-      let tmp_path = req.file.path;
+      let tmpPath = req.file.path;
       let originalExt = req.file.originalname.split(".")[
         req.file.originalname.split(".").length - 1
       ];
-      let filename = req.file.filename + "." + originalExt;
-      let target_path = path.resolve(
+      let fileName = req.file.filename + "." + originalExt;
+      let targetPath = path.resolve(
         config.rootPath,
-        `public/upload/${filename}`
+        `public/upload/${fileName}`
       );
 
-      const src = fs.createReadStream(tmp_path);
-      const dest = fs.createWriteStream(target_path);
+      const src = fs.createReadStream(tmpPath);
+      const dest = fs.createWriteStream(targetPath);
       src.pipe(dest);
 
       src.on("end", async () => {
         let product = await Product.findOne({ _id: req.params.id });
-        let currentImage = `${config.rootPath}/public/upload/${product.image_url}`;
+        let currentImage = `${config.rootPath}/public/upload/${product.imageUrl}`;
         if (fs.existsSync(currentImage)) {
           fs.unlinkSync(currentImage);
         }
         product = await Product.findOneAndUpdate(
           { _id: req.params.id },
-          { ...payload, image_url: filename },
+          { ...payload, imageUrl: fileName },
           { new: true, runValidators: true }
         )
           .populate("category")
@@ -222,7 +222,7 @@ async function destroy(req, res, next) {
       .populate("category")
       .populate("variant")
       .populate("discount");
-    let currentImage = `${config.rootPath}/public/upload/${product.image_url}`;
+    let currentImage = `${config.rootPath}/public/upload/${product.imageUrl}`;
 
     if (fs.existsSync(currentImage)) {
       fs.unlinkSync(currentImage);

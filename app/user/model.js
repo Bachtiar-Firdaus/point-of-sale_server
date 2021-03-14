@@ -5,16 +5,16 @@ const bcrypt = require("bcrypt");
 const AutoIncrement = require("mongoose-sequence")(mongoose);
 const { Timestamp } = require("mongodb");
 
-const HASH_ROUND = 10;
+const hashRound = 10;
 let userSchema = Schema(
   {
-    full_name: {
+    fullName: {
       type: String,
       required: [true, "Nama Harus di isi"],
       minlength: [3, "panjang karakter nama minimal 3"],
       maxlength: [255, "panjang karakter nama maxsimal 255"],
     },
-    customer_id: {
+    customerId: {
       type: Number,
     },
     email: {
@@ -34,13 +34,13 @@ let userSchema = Schema(
     },
     token: [String],
   },
-  { Timestamp: true }
+  { timestamps: true }
 );
 
 userSchema.path("email").validate(
   function (value) {
-    const EMAIL_RE = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-    return EMAIL_RE.test(value);
+    const emailRe = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+    return emailRe.test(value);
   },
   (attr) => `${attr.value} harus merupakan email yang valid`
 );
@@ -55,10 +55,10 @@ userSchema.path("email").validate(async function (value) {
 });
 
 userSchema.pre("save", function (next) {
-  this.password = bcrypt.hashSync(this.password, HASH_ROUND);
+  this.password = bcrypt.hashSync(this.password, hashRound);
   next();
 });
 
-userSchema.plugin(AutoIncrement, { inc_field: "customer_id" });
+userSchema.plugin(AutoIncrement, { inc_field: "customerId" });
 
 module.exports = model("User", userSchema);

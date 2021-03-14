@@ -24,7 +24,7 @@ const variantSchema = Schema(
       },
     ],
   },
-  { Timestamp: true }
+  { timestamps: true }
 );
 
 module.exports = model("Variant", variantSchema);

@@ -18,7 +18,7 @@ module.exports = {
     },
   ],
   validateOrder: [
-    check("nama_lengkap").notEmpty(),
+    check("fullName").notEmpty(),
     check("email").isEmail(),
     (req, res, next) => {
       const error = validationResult(req);
@@ -29,7 +29,7 @@ module.exports = {
     },
   ],
   validateAuth: [
-    check("full_name").notEmpty(),
+    check("fullName").notEmpty(),
     check("email").isEmail(),
     check("password").notEmpty(),
     (req, res, next) => {

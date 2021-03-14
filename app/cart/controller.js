@@ -37,7 +37,7 @@ async function cart(req, res, next) {
         categoryName: item.categoryName,
         product: realtedProduct._id,
         price: realtedProduct.price,
-        image_url: realtedProduct.image_url,
+        imageUrl: realtedProduct.imageUrl,
         name: realtedProduct.name,
         user: req.user._id,
         qty: item.qty,

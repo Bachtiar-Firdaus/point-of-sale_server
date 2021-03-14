@@ -29,7 +29,7 @@ router.post(
   authController.register
 );
 router.delete("/delete/:id", securityCek, authController.destroy);
-router.post("/login", securityCek, multer().none(), authController.login);
+router.post("/login", multer().none(), authController.login);
 router.post("/logout", securityCek, authController.logout);
 
 module.exports = router;
