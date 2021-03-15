@@ -30,16 +30,18 @@ Pembuatan Server-Side Point of Sale menggunakan despendencies :
 - "path": "^0.12.7"
 
 # **Documentasi Api POSTMAN Point of Sale**
+
 Untuk api sudah di production menggunakan heroku
-untuk membuka dokumentasi postmant bisa ikuti link ini [POSTMAN](https://documenter.getpostman.com/view/13931981/TW6wJU5V)
+untuk membuka dokumentasi postmant bisa ikuti link ini [POSTMAN](https://documenter.getpostman.com/view/13931981/Tz5qad21)
+
 # **Documentasi Api Point of Sale**
+
 ![image](https://user-images.githubusercontent.com/33290851/109778881-ed3a5280-7c37-11eb-9f10-37aef19a931b.png)![image](https://user-images.githubusercontent.com/33290851/109778948-04794000-7c38-11eb-9177-361e29373b31.png)![image](https://user-images.githubusercontent.com/33290851/109911966-b3238c00-7cdd-11eb-80d6-950e42b24087.png)
 
 # **Unified Modeling Language**
 
 - **Usecase Diagram Point of Sale**
-![image](https://user-images.githubusercontent.com/33290851/109911376-8fac1180-7cdc-11eb-98fa-6677e88d2e67.png)
-
+  ![image](https://user-images.githubusercontent.com/33290851/109911376-8fac1180-7cdc-11eb-98fa-6677e88d2e67.png)
 
 - **Diagram Activity Point of Sale**
 
@@ -98,5 +100,4 @@ untuk membuka dokumentasi postmant bisa ikuti link ini [POSTMAN](https://documen
   - [View Variant Point of Sale](https://viewer.diagrams.net/?highlight=0000ff&edit=_blank&layers=1&nav=1&title=Diagram%20Activity%20View%20Variant%20Point%20of%20Sale#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1phRGibz4JgJsuVi8qelotC00NoD-RBZC%26export%3Ddownload)
 
 - **Class Diagram Point of Sale**
-![image](https://user-images.githubusercontent.com/33290851/109775429-148f2080-7c34-11eb-869f-76d3464052a2.png)
-
+  ![image](https://user-images.githubusercontent.com/33290851/109775429-148f2080-7c34-11eb-869f-76d3464052a2.png)
