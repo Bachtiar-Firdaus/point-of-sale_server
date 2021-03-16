@@ -41,7 +41,7 @@ untuk membuka dokumentasi postmant bisa ikuti link ini [POSTMAN](https://documen
 # **Unified Modeling Language**
 
 - **Usecase Diagram Point of Sale**
-  ![image](https://user-images.githubusercontent.com/33290851/109911376-8fac1180-7cdc-11eb-98fa-6677e88d2e67.png)
+  ![image](https://user-images.githubusercontent.com/33290851/111296626-4619da00-867f-11eb-94c9-0f8548da3407.png)
 
 - **Diagram Activity Point of Sale**
 
