@@ -32,7 +32,7 @@ Pembuatan Server-Side Point of Sale menggunakan despendencies :
 # **Documentasi Api POSTMAN Point of Sale**
 
 Untuk api sudah di production menggunakan heroku
-untuk membuka dokumentasi postmant bisa ikuti link ini [POSTMAN](https://documenter.getpostman.com/view/13931981/Tz5qad21)
+untuk membuka dokumentasi **Postman** bisa ikuti link ini [POSTMAN](https://documenter.getpostman.com/view/13931981/Tz5qad21)
 
 # **Documentasi Api Point of Sale**
 
