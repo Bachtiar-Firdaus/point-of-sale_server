@@ -100,4 +100,4 @@ untuk membuka dokumentasi postmant bisa ikuti link ini [POSTMAN](https://documen
   - [View Variant Point of Sale](https://viewer.diagrams.net/?highlight=0000ff&edit=_blank&layers=1&nav=1&title=Diagram%20Activity%20View%20Variant%20Point%20of%20Sale#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1phRGibz4JgJsuVi8qelotC00NoD-RBZC%26export%3Ddownload)
 
 - **Class Diagram Point of Sale**
-  ![image](https://user-images.githubusercontent.com/33290851/109775429-148f2080-7c34-11eb-869f-76d3464052a2.png)
+  ![image](https://user-images.githubusercontent.com/33290851/111293622-0c939f80-867c-11eb-92fd-ca5e6800fce5.png)
