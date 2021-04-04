@@ -1,6 +1,10 @@
-# **Point of Sale Server-Side**
+# **Point of Sale REST API**
+## **Tentang Proyek ini**
+> *Ini adalah repositori yang berisi proyek backend rest api yang dibuat menggunakan express.js, mongodb dan heroku.
+Project ini sudah di deploy di https://point-of-sale-server.herokuapp.com*
 
-Pembuatan Server-Side Point of Sale menggunakan despendencies :
+## **Library yang di gunakan**
+Pembuatan Backend REST API dari Web Aplikasi Point of Sale menggunakan beberapa dependencies atau libraries diantara nya :
 
 - "@casl/ability": "^5.1.2",
 - "bcrypt": "^5.0.0",
@@ -29,16 +33,14 @@ Pembuatan Server-Side Point of Sale menggunakan despendencies :
 - "passport-local": "^1.0.0",
 - "path": "^0.12.7"
 
-# **Documentasi Api POSTMAN Point of Sale**
+# **Dokumentasi API**
 
-Untuk api sudah di production menggunakan heroku
-untuk membuka dokumentasi **Postman** bisa ikuti link ini [POSTMAN](https://documenter.getpostman.com/view/13931981/Tz5qad21)
-
-# **Documentasi Api Point of Sale**
+Untuk Dokumentasi API ini sudah di publish
+di link dokumentasi **Postman** ini [POSTMAN ENDPOINT](https://documenter.getpostman.com/view/13931981/Tz5qad21). Berikut ini adalah ringkasan dari daftar endpoint yang telah tersedia :
 
 ![image](https://user-images.githubusercontent.com/33290851/109778881-ed3a5280-7c37-11eb-9f10-37aef19a931b.png)![image](https://user-images.githubusercontent.com/33290851/109778948-04794000-7c38-11eb-9177-361e29373b31.png)![image](https://user-images.githubusercontent.com/33290851/109911966-b3238c00-7cdd-11eb-80d6-950e42b24087.png)
 
-# **Unified Modeling Language**
+# **Unified Modeling Language (UML)**
 
 - **Usecase Diagram Point of Sale**
   ![image](https://user-images.githubusercontent.com/33290851/111296626-4619da00-867f-11eb-94c9-0f8548da3407.png)
